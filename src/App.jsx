@@ -66,17 +66,9 @@ function App() {
       <SearchBar onGameAdd={handleGameAdd} />
 
       <div className="container">
-        <div className="collection-header">
-          <h2 className="collection-title">Mi Colección</h2>
-          {gameCount > 0 && (
-            <p className="collection-count">
-              {gameCount} juego{gameCount !== 1 ? 's' : ''} en total
-            </p>
-          )}
-        </div>
-
         <GameList
           groupedGames={collection}
+          gameCount={gameCount}
           onRemove={handleGameRemove}
         />
       </div>

@@ -13,7 +13,7 @@ const PLATFORM_ICONS = {
     'Retro/Other': '👾'
 };
 
-function GameList({ groupedGames, onRemove }) {
+function GameList({ groupedGames, gameCount, onRemove }) {
     const [selectedGame, setSelectedGame] = useState(null);
     const [sortBy, setSortBy] = useState('date-added');
     const [showSortMenu, setShowSortMenu] = useState(false);
@@ -77,7 +77,14 @@ function GameList({ groupedGames, onRemove }) {
         <>
             <div className="collection-section">
                 <div className="collection-header-controls">
-                    <h2 className="collection-title-main">Mi Colección</h2>
+                    <div className="collection-title-area">
+                        <h2 className="collection-title-main">Mi Colección</h2>
+                        {gameCount > 0 && (
+                            <p className="collection-count">
+                                {gameCount} juego{gameCount !== 1 ? 's' : ''} en total
+                            </p>
+                        )}
+                    </div>
 
                     <div className="sort-dropdown" ref={sortMenuRef}>
                         <button
