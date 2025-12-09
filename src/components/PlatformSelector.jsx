@@ -4,6 +4,18 @@ import { PLATFORMS } from '../services/storageService';
 function PlatformSelector({ game, onConfirm, onCancel }) {
     const [selectedPlatform, setSelectedPlatform] = useState('');
 
+    // Get available platforms for this game
+    // If the game has platforms data, filter to show only those
+    // Otherwise, show all platforms
+    const availablePlatforms = game.platforms && game.platforms.length > 0
+        ? PLATFORMS.filter(platform =>
+            game.platforms.some(gamePlatform =>
+                gamePlatform.toLowerCase().includes(platform.toLowerCase()) ||
+                platform.toLowerCase().includes(gamePlatform.toLowerCase())
+            )
+        )
+        : PLATFORMS; // If no platforms data, show all
+
     const handleConfirm = () => {
         if (selectedPlatform) {
             onConfirm(game, selectedPlatform);
@@ -16,10 +28,15 @@ function PlatformSelector({ game, onConfirm, onCancel }) {
                 <div className="modal-header">
                     <h2 className="modal-title">Selecciona la plataforma</h2>
                     <p className="modal-subtitle">{game.name}</p>
+                    {availablePlatforms.length < PLATFORMS.length && (
+                        <p className="modal-hint">
+                            Mostrando solo plataformas disponibles para este juego
+                        </p>
+                    )}
                 </div>
 
                 <div className="platform-grid">
-                    {PLATFORMS.map(platform => (
+                    {availablePlatforms.map(platform => (
                         <div
                             key={platform}
                             className={`platform-option ${selectedPlatform === platform ? 'selected' : ''}`}
