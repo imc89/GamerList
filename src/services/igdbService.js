@@ -100,6 +100,5 @@ function getMockResults(query) {
 }
 
 export default {
-    searchGames,
-    getAccessToken
+    searchGames
 };
