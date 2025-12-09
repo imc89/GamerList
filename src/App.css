@@ -1,0 +1,19 @@
+.app {
+  min-height: 100vh;
+  background: var(--color-bg-primary);
+}
+
+.collection-header {
+  padding: var(--spacing-2xl) 0 var(--spacing-lg);
+}
+
+.collection-title {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-primary);
+}
+
+.collection-count {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}

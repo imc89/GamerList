@@ -1,0 +1,142 @@
+// Local Storage Service for managing game collection
+
+const STORAGE_KEY = 'gamerlist_collection';
+
+// Available platforms
+export const PLATFORMS = [
+    'PC',
+    'PlayStation 5',
+    'PlayStation 4',
+    'Xbox Series X/S',
+    'Xbox One',
+    'Nintendo Switch',
+    'Retro/Other'
+];
+
+// Get all games from localStorage
+export function getGames() {
+    try {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (!data) {
+            return [];
+        }
+        return JSON.parse(data);
+    } catch (error) {
+        console.error('Error loading games from localStorage:', error);
+        return [];
+    }
+}
+
+// Save a game to the collection
+export function saveGame(game, platform) {
+    try {
+        const games = getGames();
+
+        // Check if game already exists in this platform
+        const existingIndex = games.findIndex(
+            g => g.id === game.id && g.platform === platform
+        );
+
+        if (existingIndex !== -1) {
+            // Game already exists in this platform
+            return { success: false, message: 'Este juego ya está en tu colección para esta plataforma' };
+        }
+
+        // Add the game with platform information
+        const newGame = {
+            ...game,
+            platform,
+            addedDate: new Date().toISOString()
+        };
+
+        games.push(newGame);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(games));
+
+        return { success: true, message: 'Juego añadido a tu colección' };
+    } catch (error) {
+        console.error('Error saving game:', error);
+        return { success: false, message: 'Error al guardar el juego' };
+    }
+}
+
+// Remove a game from the collection
+export function removeGame(gameId, platform) {
+    try {
+        const games = getGames();
+        const filtered = games.filter(g => !(g.id === gameId && g.platform === platform));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+        return { success: true, message: 'Juego eliminado de tu colección' };
+    } catch (error) {
+        console.error('Error removing game:', error);
+        return { success: false, message: 'Error al eliminar el juego' };
+    }
+}
+
+// Get games grouped by platform and sorted alphabetically
+export function getGamesByPlatform() {
+    const games = getGames();
+    const grouped = {};
+
+    // Group by platform
+    games.forEach(game => {
+        if (!grouped[game.platform]) {
+            grouped[game.platform] = [];
+        }
+        grouped[game.platform].push(game);
+    });
+
+    // Sort each platform's games alphabetically
+    Object.keys(grouped).forEach(platform => {
+        grouped[platform].sort((a, b) => a.name.localeCompare(b.name, 'es'));
+    });
+
+    // Sort platforms in the predefined order
+    const sortedGrouped = {};
+    PLATFORMS.forEach(platform => {
+        if (grouped[platform] && grouped[platform].length > 0) {
+            sortedGrouped[platform] = grouped[platform];
+        }
+    });
+
+    // Add any platforms not in the predefined list
+    Object.keys(grouped).forEach(platform => {
+        if (!PLATFORMS.includes(platform)) {
+            sortedGrouped[platform] = grouped[platform];
+        }
+    });
+
+    return sortedGrouped;
+}
+
+// Check if a game exists in a specific platform
+export function hasGame(gameId, platform) {
+    const games = getGames();
+    return games.some(g => g.id === gameId && g.platform === platform);
+}
+
+// Get count of games
+export function getGameCount() {
+    return getGames().length;
+}
+
+// Clear all games (optional utility)
+export function clearAllGames() {
+    try {
+        localStorage.removeItem(STORAGE_KEY);
+        return { success: true, message: 'Colección eliminada' };
+    } catch (error) {
+        console.error('Error clearing games:', error);
+        return { success: false, message: 'Error al limpiar la colección' };
+    }
+}
+
+export default {
+    PLATFORMS,
+    getGames,
+    saveGame,
+    removeGame,
+    getGamesByPlatform,
+    hasGame,
+    getGameCount,
+    clearAllGames
+};
