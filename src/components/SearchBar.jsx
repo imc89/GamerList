@@ -45,10 +45,15 @@ function SearchBar({ onGameAdd }) {
         <>
             <div className="search-section">
                 <div className="container">
-                    <h1 style={{ textAlign: 'center', marginBottom: 'var(--spacing-xl)' }}>
-                        🎮 GamerList
-                    </h1>
-                    <div className="search-bar">
+                    <div className="app-header">
+                        <img
+                            src="/ios/Icon-iOS-Dark-60x60@3x.png"
+                            alt="GamerList"
+                            className="app-logo"
+                        />
+                        <h1 className="app-title">GamerList</h1>
+                    </div>
+                    <div className="search-bar" ref={searchBarRef}>
                         <span className="search-icon">🔍</span>
                         <input
                             type="text"
