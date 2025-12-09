@@ -10,7 +10,8 @@ export const PLATFORMS = [
     'Xbox Series X/S',
     'Xbox One',
     'Nintendo Switch',
-    'Retro/Other'
+    'Mobile',
+    'Retro'
 ];
 
 // Get all games from localStorage
