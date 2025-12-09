@@ -7,7 +7,7 @@
 // For production, use a backend proxy to keep credentials secure
 
 const TWITCH_CLIENT_ID = 'hz0jx77bpwl3kccpmdoh3lfwsp1vkf';
-const TWITCH_CLIENT_SECRET = ''; // ⚠️ You need to add your Client Secret here
+const TWITCH_CLIENT_SECRET = 'zpbvke1c0riov3ogijrzyqm38kwi7n'; // ⚠️ Client Secret (visible in frontend code)
 const IGDB_API_URL = 'https://api.igdb.com/v4';
 const TWITCH_OAUTH_URL = 'https://id.twitch.tv/oauth2/token';
 

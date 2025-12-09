@@ -10,6 +10,7 @@ import {
   removeGame,
   getGameCount
 } from './services/storageService';
+import { searchGames } from './services/igdbService';
 
 function App() {
   const [collection, setCollection] = useState({});
@@ -62,6 +63,23 @@ function App() {
     setSelectedGame(null);
   };
 
+  // Test API button handler
+  const handleTestAPI = async () => {
+    console.log('🧪 Testing IGDB API with CYBERPUNK2077...');
+    try {
+      const results = await searchGames('CYBERPUNK2077');
+      console.log('✅ API Response:', results);
+      if (results && results.length > 0) {
+        alert(`✅ API funciona! Se encontraron ${results.length} resultados para CYBERPUNK2077.\n\nVer consola para detalles.`);
+      } else {
+        alert('⚠️ API respondió pero no se encontraron resultados.');
+      }
+    } catch (error) {
+      console.error('❌ Error calling API:', error);
+      alert(`❌ Error en la API: ${error.message}`);
+    }
+  };
+
   return (
     <div className="app">
       <SearchBar onGameAdd={handleGameAdd} />
@@ -74,6 +92,21 @@ function App() {
               {gameCount} juego{gameCount !== 1 ? 's' : ''} en total
             </p>
           )}
+          <button
+            onClick={handleTestAPI}
+            style={{
+              marginTop: '10px',
+              padding: '10px 20px',
+              backgroundColor: '#4CAF50',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              fontWeight: 'bold'
+            }}
+          >
+            🧪 Test API (CYBERPUNK2077)
+          </button>
         </div>
 
         <GameList
