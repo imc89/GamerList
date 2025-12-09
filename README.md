@@ -12,24 +12,20 @@ A modern web application to search, organize, and track your favorite video game
 ## Tech Stack
 
 - **Frontend**: React + Vite
-- **Backend**: Netlify Serverless Functions
 - **API**: IGDB (Internet Game Database)
-- **Deployment**: Netlify
+- **Deployment**: GitHub Pages
 
 ## Prerequisites
 
-Before you begin, you'll need:
+**Twitch Developer Account** (free):
+- Visit https://dev.twitch.tv/console
+- Enable Two-Factor Authentication (2FA)
+- Create a new application
+- Set OAuth Redirect URL to your GitHub Pages URL (e.g., `https://yourusername.github.io/`)
+- Generate a Client Secret
+- Note your `Client ID` and `Client Secret`
 
-1. **Twitch Developer Account** (free)
-   - Visit https://dev.twitch.tv/console
-   - Enable Two-Factor Authentication (2FA)
-   - Create a new application
-   - Note your `Client ID` and `Client Secret`
-
-2. **Netlify Account** (free)
-   - Visit https://www.netlify.com
-
-## Local Development
+## Setup
 
 ### 1. Install Dependencies
 
@@ -37,102 +33,44 @@ Before you begin, you'll need:
 npm install
 ```
 
-### 2. Configure Environment Variables
+### 2. Configure API Credentials
 
-Create a `.env` file in the root directory:
+Edit `src/services/igdbService.js` and add your Twitch Client Secret on line 10:
+
+```javascript
+const TWITCH_CLIENT_SECRET = 'your_client_secret_here';
+```
+
+⚠️ **Security Warning**: This exposes your Client Secret in the frontend code. For production apps, use a backend proxy instead.
+
+### 3. Run Development Server
 
 ```bash
-cp .env.example .env
+npm start
 ```
 
-Edit `.env` and add your Twitch API credentials:
+Open http://localhost:5173
 
-```
-TWITCH_CLIENT_ID=your_client_id_here
-TWITCH_CLIENT_SECRET=your_client_secret_here
-```
-
-### 3. Install Netlify CLI
+## Deployment to GitHub Pages
 
 ```bash
-npm install -g netlify-cli
+npm run deploy
 ```
 
-### 4. Run Development Server
-
-```bash
-netlify dev
-```
-
-This will:
-- Start the Vite dev server
-- Run Netlify Functions locally
-- Open your browser at `http://localhost:8888`
-
-## Deployment to Netlify
-
-### Option 1: Netlify UI (Recommended)
-
-1. Push your code to GitHub
-2. Go to https://app.netlify.com
-3. Click "Add new site" → "Import an existing project"
-4. Connect your GitHub repository
-5. Configure build settings:
-   - **Build command**: `npm run build`
-   - **Publish directory**: `dist`
-6. Add environment variables:
-   - Go to Site settings → Environment variables
-   - Add `TWITCH_CLIENT_ID` and `TWITCH_CLIENT_SECRET`
-7. Click "Deploy site"
-
-### Option 2: Netlify CLI
-
-```bash
-# Login to Netlify
-netlify login
-
-# Initialize the project
-netlify init
-
-# Deploy
-netlify deploy --prod
-```
-
-When prompted, set the environment variables in the Netlify dashboard.
-
-## Project Structure
-
-```
-GamerList/
-├── netlify/
-│   └── functions/
-│       └── igdb-search.js      # Serverless API proxy
-├── src/
-│   ├── components/             # React components
-│   ├── services/
-│   │   ├── igdbService.js      # API client
-│   │   └── storageService.js   # Local storage
-│   └── App.jsx                 # Main app component
-├── netlify.toml                # Netlify configuration
-├── .env.example                # Environment variables template
-└── package.json
-```
-
-## How It Works
-
-1. **Frontend** makes requests to `/.netlify/functions/igdb-search`
-2. **Netlify Function** authenticates with Twitch OAuth
-3. **Function** proxies the request to IGDB API
-4. **Results** are returned to the frontend
-
-This architecture keeps your API credentials secure (server-side only) and avoids CORS issues.
+This will build your app and deploy it to GitHub Pages.
 
 ## Scripts
 
-- `npm start` - Start Vite dev server (use `netlify dev` instead for full functionality)
+- `npm start` - Start development server
 - `npm run build` - Build for production
-- `npm run preview` - Preview production build
+- `npm run deploy` - Deploy to GitHub Pages
 - `npm run lint` - Run ESLint
+
+## How It Works
+
+1. **Frontend** obtains an OAuth token from Twitch
+2. **API calls** are made directly to IGDB with authentication headers
+3. **Results** are displayed in the UI
 
 ## License
 

@@ -1,40 +1,119 @@
-// IGDB API Service - Using Netlify Functions Proxy
-// The proxy handles OAuth authentication and keeps credentials secure
+// IGDB API Service
+// Direct implementation following https://api-docs.igdb.com/#requests
 
-// Determine the API URL based on environment
-// In production (Netlify), use relative path to serverless function
-// In development, use Netlify Dev proxy
-const API_BASE_URL = import.meta.env.DEV
-    ? '/.netlify/functions'
-    : '/.netlify/functions';
+// ⚠️ SECURITY WARNING ⚠️
+// In a production app, the Client Secret should NEVER be exposed in frontend code
+// This implementation is for demonstration purposes only
+// For production, use a backend proxy to keep credentials secure
 
+const TWITCH_CLIENT_ID = 'hz0jx77bpwl3kccpmdoh3lfwsp1vkf';
+const TWITCH_CLIENT_SECRET = ''; // ⚠️ You need to add your Client Secret here
+const IGDB_API_URL = 'https://api.igdb.com/v4';
+const TWITCH_OAUTH_URL = 'https://id.twitch.tv/oauth2/token';
+
+// Token cache
+let cachedToken = null;
+let tokenExpiry = null;
+
+/**
+ * Get OAuth access token from Twitch
+ * Following: https://api-docs.igdb.com/#account-creation
+ */
+export async function getAccessToken() {
+    // Return cached token if still valid (with 5 minute buffer)
+    if (cachedToken && tokenExpiry && Date.now() < tokenExpiry - 300000) {
+        return cachedToken;
+    }
+
+    if (!TWITCH_CLIENT_SECRET) {
+        console.warn('⚠️ TWITCH_CLIENT_SECRET not configured. Using mock data.');
+        return null;
+    }
+
+    try {
+        console.log('Fetching new OAuth token from Twitch...');
+
+        // POST to Twitch OAuth endpoint
+        const response = await fetch(
+            `${TWITCH_OAUTH_URL}?client_id=${TWITCH_CLIENT_ID}&client_secret=${TWITCH_CLIENT_SECRET}&grant_type=client_credentials`,
+            {
+                method: 'POST'
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`OAuth failed: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        // Cache the token
+        cachedToken = data.access_token;
+        tokenExpiry = Date.now() + (data.expires_in * 1000);
+
+        console.log('✅ OAuth token obtained successfully');
+        return cachedToken;
+    } catch (error) {
+        console.error('❌ Error getting OAuth token:', error);
+        return null;
+    }
+}
+
+/**
+ * Search for games using IGDB API
+ * Following: https://api-docs.igdb.com/#requests
+ */
 export async function searchGames(query) {
     if (!query || query.trim().length < 2) {
         return [];
     }
 
     try {
-        // Call the Netlify Function proxy instead of IGDB directly
-        const response = await fetch(`${API_BASE_URL}/igdb-search`, {
+        const token = await getAccessToken();
+
+        if (!token) {
+            console.warn('No access token available, falling back to mock data');
+            return getMockResults(query);
+        }
+
+        // Make POST request to IGDB API with required headers
+        // As per documentation: Client-ID and Authorization headers are required
+        const response = await fetch(`${IGDB_API_URL}/games`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Client-ID': TWITCH_CLIENT_ID,
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json',
+                'Content-Type': 'text/plain'
             },
-            body: JSON.stringify({ query })
+            body: `
+                search "${query}";
+                fields name, cover.url, platforms.name, platforms.abbreviation, first_release_date, summary, rating;
+                limit 20;
+                where cover != null;
+            `
         });
 
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || `API error: ${response.status}`);
+            throw new Error(`IGDB API error: ${response.status} ${response.statusText}`);
         }
 
-        const data = await response.json();
-        return data.games || [];
+        const games = await response.json();
+
+        // Transform the data to a more usable format
+        return games.map(game => ({
+            id: game.id,
+            name: game.name,
+            coverUrl: game.cover?.url ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}` : null,
+            platforms: game.platforms?.map(p => p.abbreviation || p.name) || [],
+            releaseDate: game.first_release_date ? new Date(game.first_release_date * 1000).getFullYear() : null,
+            summary: game.summary || '',
+            rating: game.rating ? Math.round(game.rating) : null
+        }));
     } catch (error) {
-        console.error('Error searching games:', error);
+        console.error('❌ Error searching games:', error);
 
         // Return mock data for development/demo purposes
-        // This allows the UI to work even without proper API authentication
         return getMockResults(query);
     }
 }
@@ -100,5 +179,6 @@ function getMockResults(query) {
 }
 
 export default {
-    searchGames
+    searchGames,
+    getAccessToken
 };
