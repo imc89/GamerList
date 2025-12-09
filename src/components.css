@@ -95,14 +95,14 @@
     opacity: 0.3;
 }
 
-/* Game Card - MOBILE ONLY */
+/* Game Card - MOBILE ONLY WITH 3D GLASS */
 .game-card {
     background: linear-gradient(145deg, rgba(30, 41, 59, 0.5), rgba(15, 23, 42, 0.7));
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 12px;
     overflow: hidden;
-    border: 1.5px solid rgba(100, 116, 139, 0.2);
+    border: 1.5px solid rgba(100, 116, 139, 0.3);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     cursor: pointer;
     height: 100%;
@@ -111,16 +111,54 @@
     position: relative;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Glass reflection effect */
+.game-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.12) 0%,
+            rgba(255, 255, 255, 0.05) 50%,
+            transparent 100%);
+    border-radius: 12px 12px 0 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* 3D light reflection */
+.game-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 30%,
+            rgba(0, 212, 255, 0.15) 0%,
+            rgba(157, 78, 221, 0.1) 25%,
+            transparent 50%);
+    pointer-events: none;
+    z-index: 5;
 }
 
 /* Active/Tap effect - mobile only */
 .game-card:active {
-    transform: scale(0.95);
-    border-color: #00d4ff;
+    transform: scale(0.95) translateY(2px);
+    border-color: rgba(0, 212, 255, 0.5);
     box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.3),
+        0 2px 8px rgba(0, 0, 0, 0.4),
         0 0 20px rgba(0, 212, 255, 0.25),
-        inset 0 0 15px rgba(0, 212, 255, 0.08);
+        inset 0 0 15px rgba(0, 212, 255, 0.08),
+        inset 0 2px 0 rgba(255, 255, 255, 0.15);
 }
 
 .game-card-image {
@@ -135,6 +173,7 @@
     font-size: 1.75rem;
     position: relative;
     overflow: hidden;
+    z-index: 2;
 }
 
 .game-card-image::before {
@@ -146,6 +185,7 @@
             transparent 50%,
             rgba(0, 0, 0, 0.6) 100%);
     pointer-events: none;
+    z-index: 1;
 }
 
 .game-card-image img {
@@ -160,6 +200,8 @@
     display: flex;
     flex-direction: column;
     background: linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(10, 14, 27, 0.7));
+    position: relative;
+    z-index: 3;
 }
 
 .game-card-title {
@@ -350,15 +392,19 @@
 
 .collection-header {
     margin-bottom: var(--spacing-xl);
+    text-align: center;
 }
 
 .collection-title {
     font-size: 2rem;
     margin-bottom: var(--spacing-sm);
-    background: var(--gradient-accent);
+    background: linear-gradient(135deg, #00d4ff 0%, #9d4edd 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 10px rgba(0, 212, 255, 0.3);
 }
 
 .collection-count {
@@ -420,15 +466,54 @@
     -webkit-backdrop-filter: blur(12px);
     border-radius: 12px;
     overflow: hidden;
-    border: 1.5px solid rgba(100, 116, 139, 0.2);
+    border: 1.5px solid rgba(100, 116, 139, 0.3);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     -webkit-tap-highlight-color: transparent;
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Glass reflection for collection cards */
+.collection-game-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.12) 0%,
+            rgba(255, 255, 255, 0.05) 50%,
+            transparent 100%);
+    border-radius: 12px 12px 0 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* 3D light reflection for collection */
+.collection-game-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 30%,
+            rgba(0, 212, 255, 0.15) 0%,
+            rgba(157, 78, 221, 0.1) 25%,
+            transparent 50%);
+    pointer-events: none;
+    z-index: 5;
 }
 
 .collection-game-card:active {
-    transform: scale(0.95);
-    border-color: #00d4ff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transform: scale(0.95) translateY(2px);
+    border-color: rgba(0, 212, 255, 0.5);
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.4),
+        inset 0 2px 0 rgba(255, 255, 255, 0.15);
 }
 
 .collection-game-card .btn-remove {
