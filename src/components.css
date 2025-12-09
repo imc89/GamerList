@@ -154,14 +154,15 @@
     opacity: 0.3;
 }
 
-/* Game Card - ENHANCED GLASSMORPHISM */
+/* Game Card - PREMIUM GLASSMORPHISM */
 .game-card {
-    background: linear-gradient(145deg, rgba(30, 41, 59, 0.4), rgba(15, 23, 42, 0.6));
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     overflow: hidden;
-    border: 1.5px solid rgba(255, 255, 255, 0.18);
     transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
     cursor: pointer;
     height: 100%;
@@ -170,11 +171,6 @@
     position: relative;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.2),
-        0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 /* Enhanced Glass reflection effect */
@@ -186,14 +182,14 @@
     right: 0;
     height: 60%;
     background: linear-gradient(165deg,
-            rgba(255, 255, 255, 0.25) 0%,
-            rgba(255, 255, 255, 0.12) 30%,
+            rgba(255, 255, 255, 0.2) 0%,
+            rgba(255, 255, 255, 0.1) 30%,
             rgba(255, 255, 255, 0.05) 60%,
             transparent 100%);
-    border-radius: 16px 16px 0 0;
+    border-radius: 20px 20px 0 0;
     pointer-events: none;
     z-index: 10;
-    opacity: 0.8;
+    opacity: 0.6;
 }
 
 /* Enhanced 3D light reflection */
@@ -528,19 +524,15 @@
 
 .collection-game-card {
     position: relative;
-    background: linear-gradient(145deg, rgba(30, 41, 59, 0.4), rgba(15, 23, 42, 0.6));
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     overflow: hidden;
-    border: 1.5px solid rgba(255, 255, 255, 0.18);
     transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
     -webkit-tap-highlight-color: transparent;
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.2),
-        0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 /* Enhanced Glass reflection for collection cards */
@@ -552,14 +544,14 @@
     right: 0;
     height: 60%;
     background: linear-gradient(165deg,
-            rgba(255, 255, 255, 0.25) 0%,
-            rgba(255, 255, 255, 0.12) 30%,
+            rgba(255, 255, 255, 0.2) 0%,
+            rgba(255, 255, 255, 0.1) 30%,
             rgba(255, 255, 255, 0.05) 60%,
             transparent 100%);
-    border-radius: 16px 16px 0 0;
+    border-radius: 20px 20px 0 0;
     pointer-events: none;
     z-index: 10;
-    opacity: 0.8;
+    opacity: 0.6;
 }
 
 /* Enhanced 3D light reflection for collection */
