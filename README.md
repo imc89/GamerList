@@ -1,16 +1,144 @@
-# React + Vite
+# 🎮 GamerList
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web application to search, organize, and track your favorite video games. Built with React and powered by the IGDB API.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🔍 Search games from the comprehensive IGDB database
+- 📋 Create custom game lists (Playing, Completed, Wishlist)
+- 🎨 Beautiful, modern UI with smooth animations
+- 📱 Responsive design for all devices
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- **Frontend**: React + Vite
+- **Backend**: Netlify Serverless Functions
+- **API**: IGDB (Internet Game Database)
+- **Deployment**: Netlify
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Before you begin, you'll need:
+
+1. **Twitch Developer Account** (free)
+   - Visit https://dev.twitch.tv/console
+   - Enable Two-Factor Authentication (2FA)
+   - Create a new application
+   - Note your `Client ID` and `Client Secret`
+
+2. **Netlify Account** (free)
+   - Visit https://www.netlify.com
+
+## Local Development
+
+### 1. Install Dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure Environment Variables
+
+Create a `.env` file in the root directory:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and add your Twitch API credentials:
+
+```
+TWITCH_CLIENT_ID=your_client_id_here
+TWITCH_CLIENT_SECRET=your_client_secret_here
+```
+
+### 3. Install Netlify CLI
+
+```bash
+npm install -g netlify-cli
+```
+
+### 4. Run Development Server
+
+```bash
+netlify dev
+```
+
+This will:
+- Start the Vite dev server
+- Run Netlify Functions locally
+- Open your browser at `http://localhost:8888`
+
+## Deployment to Netlify
+
+### Option 1: Netlify UI (Recommended)
+
+1. Push your code to GitHub
+2. Go to https://app.netlify.com
+3. Click "Add new site" → "Import an existing project"
+4. Connect your GitHub repository
+5. Configure build settings:
+   - **Build command**: `npm run build`
+   - **Publish directory**: `dist`
+6. Add environment variables:
+   - Go to Site settings → Environment variables
+   - Add `TWITCH_CLIENT_ID` and `TWITCH_CLIENT_SECRET`
+7. Click "Deploy site"
+
+### Option 2: Netlify CLI
+
+```bash
+# Login to Netlify
+netlify login
+
+# Initialize the project
+netlify init
+
+# Deploy
+netlify deploy --prod
+```
+
+When prompted, set the environment variables in the Netlify dashboard.
+
+## Project Structure
+
+```
+GamerList/
+├── netlify/
+│   └── functions/
+│       └── igdb-search.js      # Serverless API proxy
+├── src/
+│   ├── components/             # React components
+│   ├── services/
+│   │   ├── igdbService.js      # API client
+│   │   └── storageService.js   # Local storage
+│   └── App.jsx                 # Main app component
+├── netlify.toml                # Netlify configuration
+├── .env.example                # Environment variables template
+└── package.json
+```
+
+## How It Works
+
+1. **Frontend** makes requests to `/.netlify/functions/igdb-search`
+2. **Netlify Function** authenticates with Twitch OAuth
+3. **Function** proxies the request to IGDB API
+4. **Results** are returned to the frontend
+
+This architecture keeps your API credentials secure (server-side only) and avoids CORS issues.
+
+## Scripts
+
+- `npm start` - Start Vite dev server (use `netlify dev` instead for full functionality)
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+
+## License
+
+MIT
+
+## Credits
+
+- Game data provided by [IGDB](https://www.igdb.com/)
+- Built with [React](https://react.dev/) and [Vite](https://vite.dev/)

@@ -1,35 +1,12 @@
-// IGDB API Service
-// Note: IGDB requires Twitch OAuth token. For a client-side app, we'll use a proxy or CORS-enabled approach
-// The client ID provided needs to be used with Twitch authentication
+// IGDB API Service - Using Netlify Functions Proxy
+// The proxy handles OAuth authentication and keeps credentials secure
 
-const TWITCH_CLIENT_ID = 'hz0jx77bpwl3kccpmdoh3lfwsp1vkf';
-const IGDB_API_URL = 'https://api.igdb.com/v4';
-
-// For demo purposes, we'll use a simple approach with the client ID
-// In production, you'd want to use a backend proxy to handle authentication
-// and keep your client secret secure
-
-let cachedToken = null;
-let tokenExpiry = null;
-
-// Get access token from Twitch (this would normally be done on a backend)
-// For this demo, we're using the client credentials flow
-// NOTE: This is not secure for production - tokens should be obtained server-side
-export async function getAccessToken() {
-    // Check if we have a valid cached token
-    if (cachedToken && tokenExpiry && Date.now() < tokenExpiry) {
-        return cachedToken;
-    }
-
-    // For now, we'll return the client ID as a fallback
-    // In a real implementation, you'd need to:
-    // 1. Have a backend endpoint that exchanges client_id + client_secret for a token
-    // 2. Store the token securely
-    // 3. Refresh when needed
-
-    // This is a placeholder - the app will need proper authentication
-    return TWITCH_CLIENT_ID;
-}
+// Determine the API URL based on environment
+// In production (Netlify), use relative path to serverless function
+// In development, use Netlify Dev proxy
+const API_BASE_URL = import.meta.env.DEV
+    ? '/.netlify/functions'
+    : '/.netlify/functions';
 
 export async function searchGames(query) {
     if (!query || query.trim().length < 2) {
@@ -37,39 +14,22 @@ export async function searchGames(query) {
     }
 
     try {
-        const token = await getAccessToken();
-
-        // IGDB API requires POST requests with a specific query language (Apicalypse)
-        const response = await fetch(`${IGDB_API_URL}/games`, {
+        // Call the Netlify Function proxy instead of IGDB directly
+        const response = await fetch(`${API_BASE_URL}/igdb-search`, {
             method: 'POST',
             headers: {
-                'Client-ID': TWITCH_CLIENT_ID,
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json',
+                'Content-Type': 'application/json',
             },
-            body: `
-        search "${query}";
-        fields name, cover.url, platforms.name, platforms.abbreviation, first_release_date, summary;
-        limit 20;
-        where cover != null;
-      `
+            body: JSON.stringify({ query })
         });
 
         if (!response.ok) {
-            throw new Error(`API error: ${response.status}`);
+            const errorData = await response.json();
+            throw new Error(errorData.message || `API error: ${response.status}`);
         }
 
-        const games = await response.json();
-
-        // Transform the data to a more usable format
-        return games.map(game => ({
-            id: game.id,
-            name: game.name,
-            coverUrl: game.cover?.url ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}` : null,
-            platforms: game.platforms?.map(p => p.abbreviation || p.name) || [],
-            releaseDate: game.first_release_date ? new Date(game.first_release_date * 1000).getFullYear() : null,
-            summary: game.summary || ''
-        }));
+        const data = await response.json();
+        return data.games || [];
     } catch (error) {
         console.error('Error searching games:', error);
 

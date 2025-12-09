@@ -1,0 +1,22 @@
+# Netlify Configuration
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  # Build command to run (same as package.json)
+  command = "npm run build"
+  
+  # Directory with the build output (Vite default)
+  publish = "dist"
+  
+  # Directory with Netlify Functions
+  functions = "netlify/functions"
+
+# Environment variables (configure in Netlify UI)
+# TWITCH_CLIENT_ID - Your Twitch application Client ID
+# TWITCH_CLIENT_SECRET - Your Twitch application Client Secret
+
+# Redirect rules (optional, for client-side routing)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
