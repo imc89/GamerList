@@ -459,6 +459,200 @@
     justify-content: flex-end;
 }
 
+/* Game Detail Modal */
+.game-detail-modal {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideIn 0.3s ease-out;
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(239, 68, 68, 0.8);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.modal-close:hover {
+    background: rgba(239, 68, 68, 1);
+    transform: scale(1.1);
+}
+
+.game-detail-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--spacing-2xl);
+    padding: var(--spacing-2xl);
+}
+
+.game-detail-image {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 3/4;
+    border: 2px solid transparent;
+    background-image:
+        linear-gradient(135deg, #1e293b 0%, #334155 100%),
+        linear-gradient(135deg, #00d4ff, #9d4edd, #00d4ff);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    box-shadow:
+        0 0 20px rgba(0, 212, 255, 0.4),
+        0 0 40px rgba(157, 78, 221, 0.3),
+        inset 0 0 30px rgba(0, 212, 255, 0.1);
+}
+
+.game-detail-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.game-detail-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+
+.game-detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.game-detail-title {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #00d4ff 0%, #9d4edd 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.game-detail-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.meta-label {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+}
+
+.meta-value {
+    font-size: 1rem;
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+.game-detail-platforms,
+.game-detail-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-xs);
+}
+
+.platform-badge-large {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    background: rgba(157, 78, 221, 0.2);
+    border: 1px solid rgba(157, 78, 221, 0.5);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #9d4edd;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.genre-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
+    background: rgba(0, 212, 255, 0.2);
+    border: 1px solid rgba(0, 212, 255, 0.5);
+    border-radius: 8px;
+    font-size: 0.813rem;
+    font-weight: 600;
+    color: #00d4ff;
+}
+
+.game-detail-summary {
+    margin-top: var(--spacing-md);
+}
+
+.game-detail-summary h3 {
+    font-size: 1.25rem;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+    font-weight: 700;
+}
+
+.game-detail-summary p {
+    font-size: 0.938rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+}
+
+/* Responsive modal */
+@media (max-width: 768px) {
+    .game-detail-content {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+        padding: var(--spacing-lg);
+        padding-top: 60px;
+    }
+
+    .game-detail-image {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .game-detail-title {
+        font-size: 1.5rem;
+    }
+
+    .game-detail-modal {
+        margin: var(--spacing-md);
+    }
+}
+
+
 /* Game List / Collection */
 .collection-section {
     padding: var(--spacing-2xl) 0;

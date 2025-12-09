@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import GameCard from './GameCard';
+import GameDetailModal from './GameDetailModal';
 
 // Platform icons mapping
 const PLATFORM_ICONS = {
@@ -12,6 +14,7 @@ const PLATFORM_ICONS = {
 };
 
 function GameList({ groupedGames, onRemove }) {
+    const [selectedGame, setSelectedGame] = useState(null);
     const platforms = Object.keys(groupedGames);
 
     if (platforms.length === 0) {
@@ -25,35 +28,45 @@ function GameList({ groupedGames, onRemove }) {
     }
 
     return (
-        <div className="collection-section">
-            {platforms.map(platform => {
-                const games = groupedGames[platform];
-                const icon = PLATFORM_ICONS[platform] || '🎮';
+        <>
+            <div className="collection-section">
+                {platforms.map(platform => {
+                    const games = groupedGames[platform];
+                    const icon = PLATFORM_ICONS[platform] || '🎮';
 
-                return (
-                    <div key={platform} className="platform-group">
-                        <div className="platform-header">
-                            <span className="platform-icon">{icon}</span>
-                            <h2 className="platform-title">{platform}</h2>
-                            <span className="platform-game-count">
-                                {games.length}
-                            </span>
-                        </div>
+                    return (
+                        <div key={platform} className="platform-group">
+                            <div className="platform-header">
+                                <span className="platform-icon">{icon}</span>
+                                <h2 className="platform-title">{platform}</h2>
+                                <span className="platform-game-count">
+                                    {games.length}
+                                </span>
+                            </div>
 
-                        <div className="collection-grid">
-                            {games.map(game => (
-                                <GameCard
-                                    key={`${game.id}-${platform}`}
-                                    game={game}
-                                    onRemove={onRemove}
-                                    showRemove={true}
-                                />
-                            ))}
+                            <div className="collection-grid">
+                                {games.map(game => (
+                                    <GameCard
+                                        key={`${game.id}-${platform}`}
+                                        game={game}
+                                        onRemove={onRemove}
+                                        showRemove={true}
+                                        onCardClick={setSelectedGame}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                );
-            })}
-        </div>
+                    );
+                })}
+            </div>
+
+            {selectedGame && (
+                <GameDetailModal
+                    game={selectedGame}
+                    onClose={() => setSelectedGame(null)}
+                />
+            )}
+        </>
     );
 }
 

@@ -1,10 +1,23 @@
-function GameCard({ game, onAdd, onRemove, showRemove = false }) {
+function GameCard({ game, onAdd, onRemove, showRemove = false, onCardClick }) {
+    const handleCardClick = (e) => {
+        // Only trigger if not clicking on buttons
+        if (!e.target.closest('button')) {
+            onCardClick?.(game);
+        }
+    };
+
     return (
-        <div className={showRemove ? 'collection-game-card' : 'game-card'}>
+        <div
+            className={showRemove ? 'collection-game-card' : 'game-card'}
+            onClick={handleCardClick}
+        >
             {showRemove && (
                 <button
                     className="btn-remove"
-                    onClick={() => onRemove(game.id, game.platform)}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onRemove(game.id, game.platform);
+                    }}
                     title="Eliminar de la colección"
                 >
                     ✕
@@ -45,7 +58,10 @@ function GameCard({ game, onAdd, onRemove, showRemove = false }) {
                     <div className="game-card-actions">
                         <button
                             className="btn-add"
-                            onClick={() => onAdd(game)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onAdd(game);
+                            }}
                         >
                             ➕ Añadir a colección
                         </button>

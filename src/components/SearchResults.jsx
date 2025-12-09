@@ -1,6 +1,10 @@
+import { useState } from 'react';
 import GameCard from './GameCard';
+import GameDetailModal from './GameDetailModal';
 
 function SearchResults({ results, loading, onGameAdd }) {
+    const [selectedGame, setSelectedGame] = useState(null);
+
     if (loading) {
         return (
             <div className="search-results">
@@ -23,20 +27,30 @@ function SearchResults({ results, loading, onGameAdd }) {
     }
 
     return (
-        <div className="search-results">
-            <div className="results-header">
-                {results.length} resultado{results.length !== 1 ? 's' : ''} encontrado{results.length !== 1 ? 's' : ''}
+        <>
+            <div className="search-results">
+                <div className="results-header">
+                    {results.length} resultado{results.length !== 1 ? 's' : ''} encontrado{results.length !== 1 ? 's' : ''}
+                </div>
+                <div className="results-grid">
+                    {results.map(game => (
+                        <GameCard
+                            key={game.id}
+                            game={game}
+                            onAdd={onGameAdd}
+                            onCardClick={setSelectedGame}
+                        />
+                    ))}
+                </div>
             </div>
-            <div className="results-grid">
-                {results.map(game => (
-                    <GameCard
-                        key={game.id}
-                        game={game}
-                        onAdd={onGameAdd}
-                    />
-                ))}
-            </div>
-        </div>
+
+            {selectedGame && (
+                <GameDetailModal
+                    game={selectedGame}
+                    onClose={() => setSelectedGame(null)}
+                />
+            )}
+        </>
     );
 }
 
