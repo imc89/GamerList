@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { searchGames as apiSearchGames } from '../services/igdbService';
 import SearchResults from './SearchResults';
+import logoImage from '/ios/Icon-iOS-Dark-60x60@3x.png';
 
 function SearchBar({ onGameAdd }) {
     const [query, setQuery] = useState('');
@@ -48,7 +49,7 @@ function SearchBar({ onGameAdd }) {
                 <div className="container">
                     <div className="app-header">
                         <img
-                            src="/ios/Icon-iOS-Dark-60x60@3x.png"
+                            src={logoImage}
                             alt="GamerList"
                             className="app-logo"
                         />
