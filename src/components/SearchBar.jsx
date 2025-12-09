@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { searchGames as apiSearchGames } from '../services/igdbService';
 import SearchResults from './SearchResults';
 
@@ -7,6 +7,7 @@ function SearchBar({ onGameAdd }) {
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searched, setSearched] = useState(false);
+    const searchBarRef = useRef(null);
 
     // Debounce search
     useEffect(() => {
