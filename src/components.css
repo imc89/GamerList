@@ -104,30 +104,65 @@
     position: relative;
 }
 
-/* Liquid glass shimmer effect on hover */
+/* Enhanced liquid glass shimmer effect */
 .game-card::before {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
-    width: 100%;
+    left: -150%;
+    width: 150%;
     height: 100%;
     background: linear-gradient(90deg,
-            transparent,
-            rgba(255, 255, 255, 0.1),
-            transparent);
-    transition: left 0.5s;
+            transparent 0%,
+            rgba(0, 212, 255, 0.1) 25%,
+            rgba(157, 78, 221, 0.15) 50%,
+            rgba(0, 212, 255, 0.1) 75%,
+            transparent 100%);
+    z-index: 1;
+    pointer-events: none;
 }
 
 .game-card:hover::before {
-    left: 100%;
+    animation: liquid-shimmer 1.5s ease-out;
+}
+
+@keyframes liquid-shimmer {
+    0% {
+        left: -150%;
+    }
+
+    100% {
+        left: 150%;
+    }
+}
+
+/* Floating particles effect on hover */
+.game-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+            rgba(0, 212, 255, 0.15) 0%,
+            rgba(157, 78, 221, 0.1) 25%,
+            transparent 50%);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.game-card:hover::after {
+    opacity: 1;
 }
 
 .game-card:hover {
-    transform: translateY(-8px) scale(1.02);
+    transform: translateY(-10px) scale(1.02);
     border-color: var(--color-accent-primary);
-    box-shadow: var(--glass-shadow), var(--shadow-purple-glow);
-    background: rgba(255, 255, 255, 0.08);
+    box-shadow:
+        var(--glass-shadow),
+        var(--shadow-purple-glow),
+        0 0 40px rgba(0, 212, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .game-card-image {
@@ -142,6 +177,7 @@
     font-size: 3rem;
     position: relative;
     overflow: hidden;
+    z-index: 2;
 }
 
 .game-card-image img {
@@ -152,7 +188,7 @@
 }
 
 .game-card:hover .game-card-image img {
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
 
 .game-card-content {
@@ -160,7 +196,9 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.2));
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.3));
+    position: relative;
+    z-index: 2;
 }
 
 .game-card-title {

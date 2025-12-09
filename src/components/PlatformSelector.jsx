@@ -4,16 +4,27 @@ import { PLATFORMS } from '../services/storageService';
 function PlatformSelector({ game, onConfirm, onCancel }) {
     const [selectedPlatform, setSelectedPlatform] = useState('');
 
+    // Platform mapping for better matching
+    const platformMap = {
+        'PC': ['pc', 'win', 'windows', 'linux', 'mac'],
+        'PlayStation': ['ps', 'playstation', 'ps5', 'ps4', 'ps3', 'psx'],
+        'Xbox': ['xbox', 'xb', 'xone', 'xsxs', 'x360', 'series'],
+        'Nintendo Switch': ['switch', 'ns'],
+        'Nintendo': ['nintendo', 'wii', 'nes', 'snes', '3ds', 'nds'],
+        'Mobile': ['ios', 'android', 'mobile']
+    };
+
     // Get available platforms for this game
-    // If the game has platforms data, filter to show only those
-    // Otherwise, show all platforms
     const availablePlatforms = game.platforms && game.platforms.length > 0
-        ? PLATFORMS.filter(platform =>
-            game.platforms.some(gamePlatform =>
-                gamePlatform.toLowerCase().includes(platform.toLowerCase()) ||
-                platform.toLowerCase().includes(gamePlatform.toLowerCase())
-            )
-        )
+        ? PLATFORMS.filter(platform => {
+            const platformTerms = platformMap[platform] || [platform.toLowerCase()];
+            return game.platforms.some(gamePlatform => {
+                const gamePlatformLower = gamePlatform.toLowerCase();
+                return platformTerms.some(term =>
+                    gamePlatformLower.includes(term) || term.includes(gamePlatformLower)
+                );
+            });
+        })
         : PLATFORMS; // If no platforms data, show all
 
     const handleConfirm = () => {

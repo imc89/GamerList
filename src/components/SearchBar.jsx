@@ -45,12 +45,9 @@ function SearchBar({ onGameAdd }) {
         <>
             <div className="search-section">
                 <div className="container">
-                    <h1 style={{ textAlign: 'center', marginBottom: 'var(--spacing-lg)' }}>
+                    <h1 style={{ textAlign: 'center', marginBottom: 'var(--spacing-xl)' }}>
                         🎮 GamerList
                     </h1>
-                    <p style={{ textAlign: 'center', marginBottom: 'var(--spacing-xl)', color: 'var(--color-text-secondary)' }}>
-                        Busca y gestiona tu colección de videojuegos
-                    </p>
                     <div className="search-bar">
                         <span className="search-icon">🔍</span>
                         <input
