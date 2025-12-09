@@ -12,48 +12,18 @@ A modern web application to search, organize, and track your favorite video game
 ## Tech Stack
 
 - **Frontend**: React + Vite
-- **Backend**: Netlify Serverless Functions
-- **API**: IGDB (Internet Game Database)
-- **Deployment**: Netlify
+- **API**: IGDB (Internet Game Database) via CORS proxy
+- **Deployment**: GitHub Pages
 
-## Prerequisites
+## Deployment
 
-1. **Twitch Developer Account** (free):
-   - Visit https://dev.twitch.tv/console
-   - Enable Two-Factor Authentication (2FA)
-   - Create a new application
-   - Generate a Client Secret
-   - Note your `Client ID` and `Client Secret`
-
-2. **Netlify Account** (free):
-   - Visit https://www.netlify.com
-
-## Deployment to Netlify
-
-### Step 1: Push to GitHub
+### Deploy to GitHub Pages
 
 ```bash
-git add .
-git commit -m "Ready for Netlify deployment"
-git push
+npm run deploy
 ```
 
-### Step 2: Deploy on Netlify
-
-1. Go to https://app.netlify.com
-2. Click **"Add new site"** → **"Import an existing project"**
-3. Connect your **GitHub** account
-4. Select your **GamerList** repository
-5. Build settings (auto-detected):
-   - Build command: `npm run build`
-   - Publish directory: `dist`
-6. Click **"Show advanced"** → **"New variable"**
-7. Add environment variables:
-   - `TWITCH_CLIENT_ID` = `hz0jx77bpwl3kccpmdoh3lfwsp1vkf`
-   - `TWITCH_CLIENT_SECRET` = `zpbvke1c0riov3ogijrzyqm38kwi7n`
-8. Click **"Deploy site"**
-
-Your site will be live at: `https://your-site-name.netlify.app`
+Your app will be live at: `https://yourusername.github.io/GamerList/`
 
 ## Local Development
 
@@ -61,21 +31,20 @@ Your site will be live at: `https://your-site-name.netlify.app`
 # Install dependencies
 npm install
 
-# Run with Netlify Dev (includes serverless functions)
-npx netlify dev
+# Run development server
+npm start
 ```
+
+Open http://localhost:5173
 
 ## How It Works
 
-1. Frontend calls `/.netlify/functions/igdb-search`
-2. Netlify Function authenticates with Twitch OAuth (server-side)
-3. Function proxies request to IGDB API
-4. Results returned to frontend
+1. App uses a CORS proxy (`corsproxy.io`) to bypass browser restrictions
+2. Gets OAuth token from Twitch
+3. Calls IGDB API with authentication
+4. Displays game results
 
-This architecture:
-- ✅ Resolves CORS issues (required by IGDB)
-- ✅ Keeps credentials secure (server-side only)
-- ✅ Caches OAuth tokens for performance
+⚠️ **Note**: This solution uses a public CORS proxy and exposes API credentials in the frontend. It's suitable for personal projects but not recommended for production apps. For production, use a backend proxy (e.g., Netlify Functions, Vercel, or your own server).
 
 ## License
 
