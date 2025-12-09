@@ -12,65 +12,70 @@ A modern web application to search, organize, and track your favorite video game
 ## Tech Stack
 
 - **Frontend**: React + Vite
+- **Backend**: Netlify Serverless Functions
 - **API**: IGDB (Internet Game Database)
-- **Deployment**: GitHub Pages
+- **Deployment**: Netlify
 
 ## Prerequisites
 
-**Twitch Developer Account** (free):
-- Visit https://dev.twitch.tv/console
-- Enable Two-Factor Authentication (2FA)
-- Create a new application
-- Set OAuth Redirect URL to your GitHub Pages URL (e.g., `https://yourusername.github.io/`)
-- Generate a Client Secret
-- Note your `Client ID` and `Client Secret`
+1. **Twitch Developer Account** (free):
+   - Visit https://dev.twitch.tv/console
+   - Enable Two-Factor Authentication (2FA)
+   - Create a new application
+   - Generate a Client Secret
+   - Note your `Client ID` and `Client Secret`
 
-## Setup
+2. **Netlify Account** (free):
+   - Visit https://www.netlify.com
 
-### 1. Install Dependencies
+## Deployment to Netlify
+
+### Step 1: Push to GitHub
 
 ```bash
+git add .
+git commit -m "Ready for Netlify deployment"
+git push
+```
+
+### Step 2: Deploy on Netlify
+
+1. Go to https://app.netlify.com
+2. Click **"Add new site"** → **"Import an existing project"**
+3. Connect your **GitHub** account
+4. Select your **GamerList** repository
+5. Build settings (auto-detected):
+   - Build command: `npm run build`
+   - Publish directory: `dist`
+6. Click **"Show advanced"** → **"New variable"**
+7. Add environment variables:
+   - `TWITCH_CLIENT_ID` = `hz0jx77bpwl3kccpmdoh3lfwsp1vkf`
+   - `TWITCH_CLIENT_SECRET` = `zpbvke1c0riov3ogijrzyqm38kwi7n`
+8. Click **"Deploy site"**
+
+Your site will be live at: `https://your-site-name.netlify.app`
+
+## Local Development
+
+```bash
+# Install dependencies
 npm install
+
+# Run with Netlify Dev (includes serverless functions)
+npx netlify dev
 ```
-
-### 2. Configure API Credentials
-
-Edit `src/services/igdbService.js` and add your Twitch Client Secret on line 10:
-
-```javascript
-const TWITCH_CLIENT_SECRET = 'your_client_secret_here';
-```
-
-⚠️ **Security Warning**: This exposes your Client Secret in the frontend code. For production apps, use a backend proxy instead.
-
-### 3. Run Development Server
-
-```bash
-npm start
-```
-
-Open http://localhost:5173
-
-## Deployment to GitHub Pages
-
-```bash
-npm run deploy
-```
-
-This will build your app and deploy it to GitHub Pages.
-
-## Scripts
-
-- `npm start` - Start development server
-- `npm run build` - Build for production
-- `npm run deploy` - Deploy to GitHub Pages
-- `npm run lint` - Run ESLint
 
 ## How It Works
 
-1. **Frontend** obtains an OAuth token from Twitch
-2. **API calls** are made directly to IGDB with authentication headers
-3. **Results** are displayed in the UI
+1. Frontend calls `/.netlify/functions/igdb-search`
+2. Netlify Function authenticates with Twitch OAuth (server-side)
+3. Function proxies request to IGDB API
+4. Results returned to frontend
+
+This architecture:
+- ✅ Resolves CORS issues (required by IGDB)
+- ✅ Keeps credentials secure (server-side only)
+- ✅ Caches OAuth tokens for performance
 
 ## License
 
