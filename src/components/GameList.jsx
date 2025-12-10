@@ -139,7 +139,7 @@ function GameList({ groupedGames, gameCount, onRemove }) {
                         <div key={platform} className="platform-group">
                             <div className="platform-header">
                                 <span className="platform-icon">{icon}</span>
-                                <h2 className="platform-title">{platform}</h2>
+                                {/* <h2 className="platform-title">{platform}</h2> */}
                                 <span className="platform-game-count">
                                     {games.length}
                                 </span>
