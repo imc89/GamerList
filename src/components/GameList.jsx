@@ -113,7 +113,9 @@ function GameList({
         event.target.value = '';
     };
 
-    const platforms = Object.keys(groupedGames);
+    const platforms = Object.keys(groupedGames).sort((a, b) => {
+        return groupedGames[b].length - groupedGames[a].length;
+    });
 
     // Sort games within each platform
     const sortGames = (games) => {
