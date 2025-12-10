@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { FaPhotoVideo, FaArrowLeft, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaRankingStar } from "react-icons/fa6";
+import { HiCalendarDateRange } from "react-icons/hi2";
+import { IoLogoGameControllerB } from "react-icons/io";
 
 function GameDetailModal({ game, onClose, isAdded, onRemove }) {
     const [view, setView] = useState('details'); // 'details' or 'media'
@@ -117,21 +120,21 @@ function GameDetailModal({ game, onClose, isAdded, onRemove }) {
 
                             {game.releaseDate && (
                                 <div className="game-detail-meta">
-                                    <span className="meta-label">📅 Fecha de lanzamiento:</span>
+                                    <span className="meta-label"><HiCalendarDateRange /> Fecha de lanzamiento:</span>
                                     <span className="meta-value">{game.releaseDate}</span>
                                 </div>
                             )}
 
                             {game.rating && (
                                 <div className="game-detail-meta">
-                                    <span className="meta-label">⭐ Valoración:</span>
+                                    <span className="meta-label"><FaRankingStar /> Valoración:</span>
                                     <span className="meta-value">{Math.round(game.rating)}/100</span>
                                 </div>
                             )}
 
                             {game.platforms && game.platforms.length > 0 && (
                                 <div className="game-detail-meta">
-                                    <span className="meta-label">🎮 Plataformas:</span>
+                                    <span className="meta-label"><IoLogoGameControllerB /> Plataformas:</span>
                                     <div className="game-detail-platforms">
                                         {game.platforms.map((platform, idx) => (
                                             <span key={idx} className="platform-badge-large">

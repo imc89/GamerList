@@ -12,9 +12,12 @@ import {
     SiApple,
     SiRetroarch
 } from "react-icons/si";
+
 import { GiCardExchange, GiHamburgerMenu } from "react-icons/gi";
-import { FaWindows, FaXbox, FaFileImport, FaFileExport } from "react-icons/fa";
-import { MdClose } from "react-icons/md";
+import { FaWindows, FaXbox, FaFileImport, FaFileExport, FaSortAlphaDown } from "react-icons/fa";
+import { AiOutlineRise, AiOutlineFall } from "react-icons/ai";
+
+import { MdClose, MdOutlineFiberNew } from "react-icons/md";
 
 // Platform icons mapping
 const PLATFORM_ICONS = {
@@ -115,11 +118,11 @@ function GameList({
 
     const sortOptions = [
         { value: 'date-added', label: 'echa añadido', icon: <GiHamburgerMenu /> },
-        { value: 'newest', label: 'Más nuevos', icon: '🆕' },
+        { value: 'newest', label: 'Más nuevos', icon: <MdOutlineFiberNew /> },
         { value: 'oldest', label: 'Más antiguos', icon: '⏰' },
-        { value: 'rating-high', label: 'Mayor valoración', icon: '⭐' },
-        { value: 'rating-low', label: 'Menor valoración', icon: '📉' },
-        { value: 'name', label: 'A-Z', icon: '🔤' }
+        { value: 'rating-high', label: 'Mayor valoración', icon: <AiOutlineRise /> },
+        { value: 'rating-low', label: 'Menor valoración', icon: <AiOutlineFall /> },
+        { value: 'name', label: 'A-Z', icon: <FaSortAlphaDown /> }
     ];
 
     const currentSort = sortOptions.find(opt => opt.value === sortBy);
