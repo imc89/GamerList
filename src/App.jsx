@@ -10,7 +10,7 @@ import {
   removeGame,
   getGameCount
 } from './services/storageService';
-import { searchGames } from './services/igdbService';
+import { searchGames as apiSearchGames } from './services/igdbService';
 
 function App() {
   const [collection, setCollection] = useState({});
@@ -18,6 +18,12 @@ function App() {
   const [selectedGame, setSelectedGame] = useState(null);
   const [showPlatformSelector, setShowPlatformSelector] = useState(false);
   const [searchClearCallback, setSearchClearCallback] = useState(null);
+
+  // Search State Lifted
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
 
   // Load collection on mount
   useEffect(() => {
@@ -28,6 +34,38 @@ function App() {
     const grouped = getGamesByPlatform();
     setCollection(grouped);
     setGameCount(getGameCount());
+  };
+
+  // Debounce search
+  useEffect(() => {
+    if (query.trim().length < 2) {
+      setResults([]);
+      setSearched(false);
+      return;
+    }
+
+    setLoading(true);
+    const timer = setTimeout(async () => {
+      try {
+        const games = await apiSearchGames(query);
+        setResults(games);
+        setSearched(true);
+      } catch (error) {
+        console.error('Search error:', error);
+        setResults([]);
+      } finally {
+        setLoading(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const handleSearchChange = (val) => setQuery(val);
+  const handleSearchClear = () => {
+    setQuery('');
+    setResults([]);
+    setSearched(false);
   };
 
   const handleGameAdd = (game, onSuccess) => {
@@ -51,19 +89,6 @@ function App() {
       }
     } else {
       alert(result.message);
-      // Do not clear search (keep callback for potential retry or just user cancels)
-      // Actually if it fails, we usually stay in modal or close it? 
-      // PlatformSelector stays open? 
-      // If alert happens, usually imply we stay? 
-      // But currently PlatformSelector handles confirm.
-      // If I want to close selector on error?
-      // "Este juego ya está en tu colección". User says "Ok". 
-      // Selector should probably close or let user choose another platform?
-      // Logic from before: alert and... stay?
-      // The previous code had: if(success) ... else alert.
-      // So on error, it does nothing else. Modal stays open or closes?
-      // PlatformSelector calls onConfirm. It doesn't close itself.
-      // So UI stays open.
     }
   };
 
@@ -75,6 +100,27 @@ function App() {
     } else {
       alert(result.message);
     }
+  };
+
+  // Remove game from all platforms (Toggle removal)
+  const handleRemoveAnyPlatform = (gameId) => {
+    // Find all platforms containing this game
+    const platformsToRemove = [];
+    Object.keys(collection).forEach(platform => {
+      if (collection[platform].some(g => g.id === gameId)) {
+        platformsToRemove.push(platform);
+      }
+    });
+
+    if (platformsToRemove.length === 0) return;
+
+    // Remove from each
+    let success = true;
+    platformsToRemove.forEach(p => {
+      removeGame(gameId, p);
+    });
+
+    loadCollection();
   };
 
   const handlePlatformCancel = () => {
@@ -91,8 +137,10 @@ function App() {
   return (
     <div className="app">
       <SearchBar
-        onGameAdd={handleGameAdd}
-        addedGameIds={addedGameIds}
+        query={query}
+        onSearchChange={handleSearchChange}
+        onClear={handleSearchClear}
+        loading={loading}
       />
 
       <div className="container">
@@ -100,6 +148,14 @@ function App() {
           groupedGames={collection}
           gameCount={gameCount}
           onRemove={handleGameRemove}
+
+          // Search Props passed to GameList
+          searchResults={results}
+          searchLoading={loading}
+          searchSearched={searched}
+          onGameAdd={handleGameAdd}
+          onGameRemoveFromSearch={handleRemoveAnyPlatform}
+          addedGameIds={addedGameIds}
         />
       </div>
 
@@ -115,4 +171,3 @@ function App() {
 }
 
 export default App;
-
