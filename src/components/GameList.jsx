@@ -6,6 +6,8 @@ import {
     SiPlaystation5,
     SiPlaystation4,
     SiNintendo,
+    SiNintendoswitch,
+    SiApple,
     SiRetroarch
 } from "react-icons/si";
 import { FaWindows, FaXbox } from "react-icons/fa";
@@ -13,12 +15,16 @@ import { FaWindows, FaXbox } from "react-icons/fa";
 // Platform icons mapping
 const PLATFORM_ICONS = {
     'PC': <FaWindows />,
-    'PlayStation 5': <SiPlaystation5 />,
-    'PlayStation 4': <SiPlaystation4 />,
-    'Xbox Series X/S': <FaXbox />,
+    "Mac": <SiApple />,
+    "XONE": <FaXbox />,
+    'PS5': <SiPlaystation5 />,
+    'PS4': <SiPlaystation4 />,
+    'Linux': <FaWindows />,
+    'Series X|S': <FaXbox />,
     'Xbox One': <FaXbox />,
-    'Nintendo Switch': <SiNintendo />,
-    'Retro/Other': <SiRetroarch />
+    "Switch": <SiNintendoswitch />,
+    'Switch 2': <SiNintendoswitch />,
+    'DOS': <SiRetroarch />
 };
 
 function GameList({ groupedGames, gameCount, onRemove }) {
