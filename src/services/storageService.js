@@ -5,13 +5,19 @@ const STORAGE_KEY = 'gamerlist_collection';
 // Available platforms
 export const PLATFORMS = [
     'PC',
-    'PlayStation 5',
-    'PlayStation 4',
-    'Xbox Series X/S',
+    "Mac",
+    "iOS",
+    "XONE",
+    'PS5',
+    'PS4',
+    'Linux',
+    'Series X|S',
     'Xbox One',
-    'Nintendo Switch',
-    'Mobile',
-    'Retro'
+    'Wii',
+    'WiiU',
+    "Switch",
+    'Switch 2',
+    'DOS'
 ];
 
 // Get all games from localStorage
