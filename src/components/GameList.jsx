@@ -32,6 +32,7 @@ function GameList({ groupedGames, gameCount, onRemove }) {
     const [selectedGame, setSelectedGame] = useState(null);
     const [sortBy, setSortBy] = useState('date-added');
     const [showSortMenu, setShowSortMenu] = useState(false);
+    const [showDataModal, setShowDataModal] = useState(false);
     const sortMenuRef = useRef(null);
     const fileInputRef = useRef(null);
 
@@ -78,16 +79,6 @@ function GameList({ groupedGames, gameCount, onRemove }) {
 
     const platforms = Object.keys(groupedGames);
 
-    if (platforms.length === 0) {
-        return (
-            <div className="empty-collection">
-                <div className="empty-collection-icon">📚</div>
-                <h3>Tu colección está vacía</h3>
-                <p>Busca y añade juegos usando el buscador de arriba</p>
-            </div>
-        );
-    }
-
     // Sort games within each platform
     const sortGames = (games) => {
         return [...games].sort((a, b) => {
@@ -130,6 +121,11 @@ function GameList({ groupedGames, gameCount, onRemove }) {
                                 {gameCount} juego{gameCount !== 1 ? 's' : ''} en total
                             </p>
                         )}
+                        {gameCount === 0 && (
+                            <p className="collection-count">
+                                Sin juegos guardados
+                            </p>
+                        )}
                     </div>
 
                     <div className="collection-actions">
@@ -137,6 +133,8 @@ function GameList({ groupedGames, gameCount, onRemove }) {
                             <button
                                 className="sort-button"
                                 onClick={() => setShowSortMenu(!showSortMenu)}
+                                disabled={platforms.length === 0}
+                                style={{ opacity: platforms.length === 0 ? 0.5 : 1 }}
                             >
                                 <span>{currentSort.icon}</span>
                                 <span className="sort-label">Ordenar</span>
@@ -162,15 +160,11 @@ function GameList({ groupedGames, gameCount, onRemove }) {
                             )}
                         </div>
 
-                        <button className="action-button export-btn" onClick={handleExport} title="Exportar colección">
-                            <span className="action-icon">📤</span>
-                            <span className="action-label">Exportar</span>
+                        <button className="action-button" onClick={() => setShowDataModal(true)} title="Opciones de datos">
+                            <span className="action-icon">💾</span>
+                            <span className="action-label">Datos</span>
                         </button>
 
-                        <button className="action-button import-btn" onClick={() => fileInputRef.current?.click()} title="Importar colección">
-                            <span className="action-icon">📥</span>
-                            <span className="action-label">Importar</span>
-                        </button>
                         <input
                             type="file"
                             ref={fileInputRef}
@@ -181,35 +175,46 @@ function GameList({ groupedGames, gameCount, onRemove }) {
                     </div>
                 </div>
 
-                {platforms.map(platform => {
-                    const games = groupedGames[platform];
-                    const sortedGames = sortGames(games);
-                    const icon = PLATFORM_ICONS[platform] || '🎮';
+                {platforms.length === 0 ? (
+                    <div className="empty-collection">
+                        <div className="empty-collection-icon">📚</div>
+                        <h3>Tu colección está vacía</h3>
+                        <p>Busca y añade juegos usando el buscador de arriba</p>
+                        <p style={{ marginTop: '1rem', fontSize: '0.9em', opacity: 0.8 }}>
+                            O importa una copia de seguridad usando el botón "Datos"
+                        </p>
+                    </div>
+                ) : (
+                    platforms.map(platform => {
+                        const games = groupedGames[platform];
+                        const sortedGames = sortGames(games);
+                        const icon = PLATFORM_ICONS[platform] || '🎮';
 
-                    return (
-                        <div key={platform} className="platform-group">
-                            <div className="platform-header">
-                                <span className="platform-icon">{icon}</span>
-                                {/* <h2 className="platform-title">{platform}</h2> */}
-                                <span className="platform-game-count">
-                                    {games.length}
-                                </span>
-                            </div>
+                        return (
+                            <div key={platform} className="platform-group">
+                                <div className="platform-header">
+                                    <span className="platform-icon">{icon}</span>
+                                    {/* <h2 className="platform-title">{platform}</h2> */}
+                                    <span className="platform-game-count">
+                                        {games.length}
+                                    </span>
+                                </div>
 
-                            <div className="collection-grid">
-                                {sortedGames.map(game => (
-                                    <GameCard
-                                        key={`${game.id}-${platform}`}
-                                        game={game}
-                                        onRemove={onRemove}
-                                        showRemove={true}
-                                        onCardClick={setSelectedGame}
-                                    />
-                                ))}
+                                <div className="collection-grid">
+                                    {sortedGames.map(game => (
+                                        <GameCard
+                                            key={`${game.id}-${platform}`}
+                                            game={game}
+                                            onRemove={onRemove}
+                                            showRemove={true}
+                                            onCardClick={setSelectedGame}
+                                        />
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })
+                )}
             </div>
 
             {selectedGame && (
@@ -217,6 +222,37 @@ function GameList({ groupedGames, gameCount, onRemove }) {
                     game={selectedGame}
                     onClose={() => setSelectedGame(null)}
                 />
+            )}
+
+            {showDataModal && (
+                <div className="modal-overlay" onClick={() => setShowDataModal(false)}>
+                    <div className="modal" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Gestión de Datos</h2>
+                            <p className="modal-subtitle">Haz una copia de seguridad o restaura tu colección</p>
+                        </div>
+
+                        <div className="data-actions-grid">
+                            <div className="data-action-card" onClick={handleExport}>
+                                <div className="data-icon">📤</div>
+                                <h3>Exportar</h3>
+                                <p>Descarga un archivo JSON con toda tu colección.</p>
+                            </div>
+
+                            <div className="data-action-card" onClick={() => fileInputRef.current?.click()}>
+                                <div className="data-icon">📥</div>
+                                <h3>Importar</h3>
+                                <p>Sube un archivo de respaldo para restaurar tu colección.</p>
+                            </div>
+                        </div>
+
+                        <div className="modal-actions">
+                            <button className="btn-cancel" onClick={() => setShowDataModal(false)}>
+                                Cerrar
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </>
     );
