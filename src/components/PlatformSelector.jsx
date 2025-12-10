@@ -16,7 +16,7 @@ function PlatformSelector({ game, onConfirm, onCancel }) {
     };
 
     return (
-        <div className="modal-overlay" onClick={onCancel}>
+        <div className="modal-overlay" style={{ zIndex: 2100 }} onClick={onCancel}>
             <div className="modal" onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
                     <h2 className="modal-title">Selecciona la plataforma</h2>
