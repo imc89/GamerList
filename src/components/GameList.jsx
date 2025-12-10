@@ -11,6 +11,7 @@ import {
     SiWiiu,
     SiNintendoswitch,
     SiApple,
+    SiIos,
     SiRetroarch
 } from "react-icons/si";
 
@@ -24,6 +25,7 @@ import { MdClose, MdOutlineFiberNew, MdOutlineWatchLater } from "react-icons/md"
 const PLATFORM_ICONS = {
     'PC': <FaWindows />,
     "Mac": <SiApple />,
+    "iOS": <SiIos />,
     "XONE": <FaXbox />,
     'PS5': <SiPlaystation5 />,
     'PS4': <SiPlaystation4 />,
