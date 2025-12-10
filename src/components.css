@@ -913,17 +913,16 @@
 }
 
 .platform-header {
-    margin: 5px;
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
-    padding: var(--spacing-md) 0;
     border-bottom: 2px solid var(--glass-border);
     margin-bottom: var(--spacing-lg);
 }
 
 .platform-icon {
     font-size: 5rem;
+    margin-bottom: -1.5rem;
 }
 
 .platform-title {
