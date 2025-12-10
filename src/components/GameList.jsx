@@ -12,6 +12,7 @@ import {
     SiRetroarch
 } from "react-icons/si";
 import { FaWindows, FaXbox, FaFileImport, FaFileExport } from "react-icons/fa";
+import { MdClose } from "react-icons/md";
 
 // Platform icons mapping
 const PLATFORM_ICONS = {
@@ -227,6 +228,10 @@ function GameList({ groupedGames, gameCount, onRemove }) {
             {showDataModal && (
                 <div className="modal-overlay" onClick={() => setShowDataModal(false)}>
                     <div className="modal" onClick={e => e.stopPropagation()}>
+                        <button className="modal-close-btn" onClick={() => setShowDataModal(false)}>
+                            <MdClose />
+                        </button>
+
                         <div className="modal-header">
                             <h2 className="modal-title">Gestión de Datos</h2>
                             <p className="modal-subtitle">Haz una copia de seguridad o restaura tu colección</p>
@@ -247,12 +252,6 @@ function GameList({ groupedGames, gameCount, onRemove }) {
                                     <h3>Importar</h3>
                                     <p>Sube un archivo de respaldo para restaurar tu colección.</p>
                                 </div>
-                            </button>
-                        </div>
-
-                        <div className="modal-actions">
-                            <button className="btn-cancel" onClick={() => setShowDataModal(false)}>
-                                Cerrar
                             </button>
                         </div>
                     </div>

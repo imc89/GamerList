@@ -1144,6 +1144,47 @@
     margin: var(--spacing-md) 0;
 }
 
+/* Modal Base Styles */
+.modal {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-2xl);
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    color: var(--color-text-primary);
+    animation: modalSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    color: var(--color-text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.modal-close-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    transform: rotate(90deg);
+}
+
 /* Data Management Modal */
 .data-actions-grid {
     display: grid;
