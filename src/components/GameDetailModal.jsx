@@ -1,6 +1,9 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { FaPhotoVideo, FaArrowLeft } from "react-icons/fa";
 
 function GameDetailModal({ game, onClose }) {
+    const [view, setView] = useState('details'); // 'details' or 'media'
+
     // Close on ESC key
     useEffect(() => {
         const handleEscape = (e) => {
@@ -12,71 +15,128 @@ function GameDetailModal({ game, onClose }) {
 
     if (!game) return null;
 
+    const hasMedia = (game.videos && game.videos.length > 0) || (game.screenshots && game.screenshots.length > 0);
+
     return (
         <div className="modal-overlay" onClick={onClose}>
             <div className="game-detail-modal" onClick={(e) => e.stopPropagation()}>
                 <button className="modal-close" onClick={onClose}>✕</button>
 
-                <div className="game-detail-content">
-                    <div className="game-detail-image">
-                        {game.coverUrl ? (
-                            <img src={game.coverUrl} alt={game.name} />
-                        ) : (
-                            <div className="game-detail-placeholder">🎮</div>
-                        )}
-                    </div>
+                {view === 'media' ? (
+                    <div className="game-media-content">
+                        <button className="back-button" onClick={() => setView('details')}>
+                            <FaArrowLeft /> Volver a detalles
+                        </button>
 
-                    <div className="game-detail-info">
-                        <h2 className="game-detail-title">{game.name}</h2>
+                        <h2 className="game-detail-title">Galería Multimedia</h2>
 
-                        {game.releaseDate && (
-                            <div className="game-detail-meta">
-                                <span className="meta-label">📅 Fecha de lanzamiento:</span>
-                                <span className="meta-value">{game.releaseDate}</span>
-                            </div>
-                        )}
-
-                        {game.rating && (
-                            <div className="game-detail-meta">
-                                <span className="meta-label">⭐ Valoración:</span>
-                                <span className="meta-value">{Math.round(game.rating)}/100</span>
-                            </div>
-                        )}
-
-                        {game.platforms && game.platforms.length > 0 && (
-                            <div className="game-detail-meta">
-                                <span className="meta-label">🎮 Plataformas:</span>
-                                <div className="game-detail-platforms">
-                                    {game.platforms.map((platform, idx) => (
-                                        <span key={idx} className="platform-badge-large">
-                                            {platform}
-                                        </span>
-                                    ))}
+                        <div className="media-scroll-container">
+                            {game.videos && game.videos.length > 0 && (
+                                <div className="media-section">
+                                    <h3>Trailers</h3>
+                                    <div className="video-grid">
+                                        {game.videos.map(videoId => (
+                                            <div key={videoId} className="video-container">
+                                                <iframe
+                                                    src={`https://www.youtube.com/embed/${videoId}`}
+                                                    title="YouTube video player"
+                                                    frameBorder="0"
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                    allowFullScreen
+                                                ></iframe>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
 
-                        {game.genres && game.genres.length > 0 && (
-                            <div className="game-detail-meta">
-                                <span className="meta-label">🎯 Géneros:</span>
-                                <div className="game-detail-genres">
-                                    {game.genres.map((genre, idx) => (
-                                        <span key={idx} className="genre-badge">
-                                            {genre}
-                                        </span>
-                                    ))}
+                            {game.screenshots && game.screenshots.length > 0 && (
+                                <div className="media-section">
+                                    <h3>Imágenes</h3>
+                                    <div className="screenshot-grid">
+                                        {game.screenshots.map((url, idx) => (
+                                            <img key={idx} src={url} alt={`Screenshot ${idx + 1}`} className="game-screenshot" loading="lazy" />
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
 
-                        {game.summary && (
-                            <div className="game-detail-summary">
-                                <h3>Descripción</h3>
-                                <p>{game.summary}</p>
-                            </div>
-                        )}
+                            {!hasMedia && (
+                                <p className="no-media-message">No hay contenido multimedia disponible para este juego.</p>
+                            )}
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <div className="game-detail-content">
+                        <div className="game-detail-image-section">
+                            <div className="game-detail-image">
+                                {game.coverUrl ? (
+                                    <img src={game.coverUrl} alt={game.name} />
+                                ) : (
+                                    <div className="game-detail-placeholder">🎮</div>
+                                )}
+                            </div>
+
+                            {hasMedia && (
+                                <button className="media-button" onClick={() => setView('media')}>
+                                    <FaPhotoVideo />
+                                    TRAILER E IMAGENES
+                                </button>
+                            )}
+                        </div>
+
+                        <div className="game-detail-info">
+                            <h2 className="game-detail-title">{game.name}</h2>
+
+                            {game.releaseDate && (
+                                <div className="game-detail-meta">
+                                    <span className="meta-label">📅 Fecha de lanzamiento:</span>
+                                    <span className="meta-value">{game.releaseDate}</span>
+                                </div>
+                            )}
+
+                            {game.rating && (
+                                <div className="game-detail-meta">
+                                    <span className="meta-label">⭐ Valoración:</span>
+                                    <span className="meta-value">{Math.round(game.rating)}/100</span>
+                                </div>
+                            )}
+
+                            {game.platforms && game.platforms.length > 0 && (
+                                <div className="game-detail-meta">
+                                    <span className="meta-label">🎮 Plataformas:</span>
+                                    <div className="game-detail-platforms">
+                                        {game.platforms.map((platform, idx) => (
+                                            <span key={idx} className="platform-badge-large">
+                                                {platform}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {game.genres && game.genres.length > 0 && (
+                                <div className="game-detail-meta">
+                                    <span className="meta-label">🎯 Géneros:</span>
+                                    <div className="game-detail-genres">
+                                        {game.genres.map((genre, idx) => (
+                                            <span key={idx} className="genre-badge">
+                                                {genre}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {game.summary && (
+                                <div className="game-detail-summary">
+                                    <h3>Descripción</h3>
+                                    <p>{game.summary}</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

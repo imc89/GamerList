@@ -77,7 +77,7 @@ export async function searchGames(query) {
             },
             body: `
                 search "${query}";
-                fields name, cover.url, platforms.name, platforms.abbreviation, first_release_date, summary, rating;
+                fields name, cover.url, platforms.name, platforms.abbreviation, first_release_date, summary, rating, screenshots.url, videos.video_id;
                 limit 20;
                 where cover != null;
             `
@@ -97,7 +97,9 @@ export async function searchGames(query) {
             platforms: game.platforms?.map(p => p.abbreviation || p.name) || [],
             releaseDate: game.first_release_date ? new Date(game.first_release_date * 1000).getFullYear() : null,
             summary: game.summary || '',
-            rating: game.rating ? Math.round(game.rating) : null
+            rating: game.rating ? Math.round(game.rating) : null,
+            screenshots: game.screenshots?.map(s => `https:${s.url.replace('t_thumb', 't_screenshot_big')}`) || [],
+            videos: game.videos?.map(v => v.video_id) || []
         }));
     } catch (error) {
         console.error('❌ Error searching games:', error);
