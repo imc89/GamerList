@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FaPhotoVideo, FaArrowLeft, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-function GameDetailModal({ game, onClose }) {
+function GameDetailModal({ game, onClose, isAdded, onRemove }) {
     const [view, setView] = useState('details'); // 'details' or 'media'
     const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
@@ -96,12 +96,20 @@ function GameDetailModal({ game, onClose }) {
                                 )}
                             </div>
 
-                            {hasMedia && (
-                                <button className="media-button" onClick={() => setView('media')}>
-                                    <FaPhotoVideo />
-                                    TRAILER E IMAGENES
-                                </button>
-                            )}
+                            <div className="modal-actions-col">
+                                {isAdded && (
+                                    <button className="btn-remove-list" onClick={onRemove}>
+                                        ELIMINAR DEL LISTADO
+                                    </button>
+                                )}
+
+                                {hasMedia && (
+                                    <button className="media-button" onClick={() => setView('media')}>
+                                        <FaPhotoVideo />
+                                        TRAILER E IMAGENES
+                                    </button>
+                                )}
+                            </div>
                         </div>
 
                         <div className="game-detail-info">

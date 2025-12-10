@@ -41,6 +41,9 @@ function SearchBar({ query, onSearchChange, onClear, loading }) {
                         placeholder="Buscar juegos... (⌘K)"
                         value={query}
                         onChange={(e) => onSearchChange(e.target.value)}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        spellCheck="false"
                     />
                     {query && !loading && (
                         <button className="search-clear-btn" onClick={handleClear} title="Borrar búsqueda">

@@ -82,11 +82,8 @@ function App() {
       setShowPlatformSelector(false);
       setSelectedGame(null);
 
-      // Clear search results only on success
-      if (searchClearCallback) {
-        searchClearCallback();
-        setSearchClearCallback(null);
-      }
+      // Clear search immediately
+      handleSearchClear();
     } else {
       alert(result.message);
     }

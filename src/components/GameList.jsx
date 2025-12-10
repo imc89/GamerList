@@ -124,6 +124,17 @@ function GameList({
 
     const currentSort = sortOptions.find(opt => opt.value === sortBy);
 
+    const handleModalRemove = () => {
+        if (selectedGame) {
+            if (selectedGame.platform) {
+                onRemove(selectedGame.id, selectedGame.platform);
+            } else {
+                onGameRemoveFromSearch(selectedGame.id);
+            }
+            setSelectedGame(null);
+        }
+    };
+
     return (
         <>
             <div className="collection-section">
@@ -248,6 +259,10 @@ function GameList({
                 <GameDetailModal
                     game={selectedGame}
                     onClose={() => setSelectedGame(null)}
+                    isAdded={addedGameIds.has(selectedGame.id)}
+                    onRemove={handleModalRemove}
+                // If opening from collection, selectedGame has platform. 
+                // But checking ID in addedGameIds is safe to see if it exists at all.
                 />
             )}
 
