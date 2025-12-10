@@ -117,8 +117,8 @@ function GameList({
     };
 
     const sortOptions = [
-        { value: 'date-added', label: 'echa añadido', icon: <GiHamburgerMenu /> },
-        { value: 'newest', label: 'Más nuevos', icon: <MdOutlineFiberNew /> },
+        { value: 'date-added', label: 'fecha añadido', icon: <GiHamburgerMenu /> },
+        { value: 'newest', label: 'Más nuevos', icon: <MdOutlineFiberNew style={{ fontSize: '1.5em' }} /> },
         { value: 'oldest', label: 'Más antiguos', icon: <MdOutlineWatchLater /> },
         { value: 'rating-high', label: 'Mayor valoración', icon: <AiOutlineRise /> },
         { value: 'rating-low', label: 'Menor valoración', icon: <AiOutlineFall /> },
