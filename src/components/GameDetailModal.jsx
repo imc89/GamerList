@@ -1,18 +1,29 @@
 import { useState, useEffect } from 'react';
-import { FaPhotoVideo, FaArrowLeft } from "react-icons/fa";
+import { FaPhotoVideo, FaArrowLeft, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 function GameDetailModal({ game, onClose }) {
     const [view, setView] = useState('details'); // 'details' or 'media'
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
-    // Close on ESC key
+    // Close on ESC key or Navigate Lightbox
     useEffect(() => {
-        const handleEscape = (e) => {
-            if (e.key === 'Escape') onClose();
+        const handleKeyDown = (e) => {
+            if (selectedImageIndex !== null) {
+                if (e.key === 'ArrowLeft') {
+                    setSelectedImageIndex((prev) => (prev - 1 + game.screenshots.length) % game.screenshots.length);
+                } else if (e.key === 'ArrowRight') {
+                    setSelectedImageIndex((prev) => (prev + 1) % game.screenshots.length);
+                } else if (e.key === 'Escape') {
+                    setSelectedImageIndex(null);
+                    e.stopPropagation(); // Try to prevent modal close
+                }
+            } else {
+                if (e.key === 'Escape') onClose();
+            }
         };
-        window.addEventListener('keydown', handleEscape);
-        return () => window.removeEventListener('keydown', handleEscape);
-    }, [onClose]);
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [onClose, selectedImageIndex, game]);
 
     if (!game) return null;
 
@@ -62,7 +73,7 @@ function GameDetailModal({ game, onClose }) {
                                                 alt={`Screenshot ${idx + 1}`}
                                                 className="game-screenshot"
                                                 loading="lazy"
-                                                onClick={() => setSelectedImage(url)}
+                                                onClick={() => setSelectedImageIndex(idx)}
                                             />
                                         ))}
                                     </div>
@@ -148,15 +159,40 @@ function GameDetailModal({ game, onClose }) {
             </div>
 
             {/* Lightbox Overlay */}
-            {selectedImage && (
-                <div className="lightbox-overlay" onClick={() => setSelectedImage(null)}>
-                    <button className="lightbox-close" onClick={() => setSelectedImage(null)}>✕</button>
+            {selectedImageIndex !== null && (
+                <div className="lightbox-overlay" onClick={() => setSelectedImageIndex(null)}>
+                    <button className="lightbox-close" onClick={() => setSelectedImageIndex(null)}>✕</button>
+
+                    <button
+                        className="lightbox-nav-btn prev"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedImageIndex((prev) => (prev - 1 + game.screenshots.length) % game.screenshots.length);
+                        }}
+                    >
+                        <FaChevronLeft />
+                    </button>
+
                     <img
-                        src={selectedImage}
-                        alt="Fullscreen"
+                        src={game.screenshots[selectedImageIndex]}
+                        alt={`Screenshot ${selectedImageIndex + 1}`}
                         className="lightbox-image"
                         onClick={(e) => e.stopPropagation()}
                     />
+
+                    <button
+                        className="lightbox-nav-btn next"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedImageIndex((prev) => (prev + 1) % game.screenshots.length);
+                        }}
+                    >
+                        <FaChevronRight />
+                    </button>
+
+                    <div className="lightbox-counter">
+                        {selectedImageIndex + 1} / {game.screenshots.length}
+                    </div>
                 </div>
             )}
         </div>

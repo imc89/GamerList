@@ -1249,9 +1249,10 @@
 }
 
 .video-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--spacing-md);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-lg);
 }
 
 .video-container {
@@ -1259,9 +1260,13 @@
     padding-bottom: 56.25%;
     /* 16:9 */
     height: 0;
+    width: 100%;
+    max-width: 450px;
+    /* Smaller size */
     background: rgba(0, 0, 0, 0.2);
     border-radius: var(--radius-md);
     overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .video-container iframe {
