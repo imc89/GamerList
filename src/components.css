@@ -913,6 +913,7 @@
 }
 
 .platform-header {
+    margin: 5px;
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
@@ -922,7 +923,7 @@
 }
 
 .platform-icon {
-    font-size: 2rem;
+    font-size: 5rem;
 }
 
 .platform-title {
