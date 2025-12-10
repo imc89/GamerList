@@ -783,6 +783,7 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin: 0;
+    padding: var(--spacing-xl);
     line-height: 1.2;
 }
 
@@ -1193,7 +1194,7 @@
     background: transparent;
     border: 1px solid var(--glass-border);
     color: var(--color-text-primary);
-    padding: 8px 16px;
+    padding: var(--spacing-xl);
     border-radius: 20px;
     cursor: pointer;
     display: flex;
