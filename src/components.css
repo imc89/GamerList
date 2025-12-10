@@ -1194,13 +1194,12 @@
     background: transparent;
     border: 1px solid var(--glass-border);
     color: var(--color-text-primary);
-    padding: var(--spacing-xl);
     border-radius: 20px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: var(--spacing-md);
+    margin: var(--spacing-xl);
     transition: all 0.2s ease;
 }
 
