@@ -1155,7 +1155,7 @@
         margin: var(--spacing-xl) 0;
     }
 
-    .data-action-card {
+    .data-action-btn {
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid var(--glass-border);
         border-radius: var(--radius-lg);
@@ -1166,29 +1166,48 @@
         text-align: center;
         cursor: pointer;
         transition: all var(--transition-fast);
+        width: 100%;
+        color: var(--color-text-primary);
+        font-family: inherit;
     }
 
-    .data-action-card:hover {
+    .data-action-btn:hover {
         background: rgba(255, 255, 255, 0.1);
         border-color: var(--color-accent-primary);
         transform: translateY(-4px);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     }
 
-    .data-icon {
+    .data-action-btn .data-icon {
         font-size: 2.5rem;
         margin-bottom: var(--spacing-md);
+        color: var(--color-accent-primary);
+        transition: transform var(--transition-fast);
     }
 
-    .data-action-card h3 {
+    .data-action-btn:hover .data-icon {
+        transform: scale(1.1);
+    }
+
+    .data-btn-content h3 {
         margin: 0 0 var(--spacing-xs);
-        color: var(--color-text-primary);
+        font-size: 1.125rem;
+        font-weight: 700;
     }
 
-    .data-action-card p {
+    .data-btn-content p {
         margin: 0;
         font-size: 0.875rem;
         color: var(--color-text-secondary);
+        line-height: 1.4;
+    }
+
+    .export-action:hover .data-icon {
+        color: var(--color-accent-secondary);
+    }
+
+    .import-action:hover .data-icon {
+        color: #10b981;
     }
 
     @media (max-width: 600px) {

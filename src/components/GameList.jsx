@@ -11,7 +11,7 @@ import {
     SiApple,
     SiRetroarch
 } from "react-icons/si";
-import { FaWindows, FaXbox } from "react-icons/fa";
+import { FaWindows, FaXbox, FaFileImport, FaFileExport } from "react-icons/fa";
 
 // Platform icons mapping
 const PLATFORM_ICONS = {
@@ -233,17 +233,21 @@ function GameList({ groupedGames, gameCount, onRemove }) {
                         </div>
 
                         <div className="data-actions-grid">
-                            <div className="data-action-card" onClick={handleExport}>
-                                <div className="data-icon">📤</div>
-                                <h3>Exportar</h3>
-                                <p>Descarga un archivo JSON con toda tu colección.</p>
-                            </div>
+                            <button className="data-action-btn export-action" onClick={handleExport}>
+                                <FaFileExport className="data-icon" />
+                                <div className="data-btn-content">
+                                    <h3>Exportar</h3>
+                                    <p>Descarga un archivo JSON con toda tu colección.</p>
+                                </div>
+                            </button>
 
-                            <div className="data-action-card" onClick={() => fileInputRef.current?.click()}>
-                                <div className="data-icon">📥</div>
-                                <h3>Importar</h3>
-                                <p>Sube un archivo de respaldo para restaurar tu colección.</p>
-                            </div>
+                            <button className="data-action-btn import-action" onClick={() => fileInputRef.current?.click()}>
+                                <FaFileImport className="data-icon" />
+                                <div className="data-btn-content">
+                                    <h3>Importar</h3>
+                                    <p>Sube un archivo de respaldo para restaurar tu colección.</p>
+                                </div>
+                            </button>
                         </div>
 
                         <div className="modal-actions">
