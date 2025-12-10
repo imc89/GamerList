@@ -17,7 +17,7 @@ import { GiCardExchange, GiHamburgerMenu } from "react-icons/gi";
 import { FaWindows, FaXbox, FaFileImport, FaFileExport, FaSortAlphaDown } from "react-icons/fa";
 import { AiOutlineRise, AiOutlineFall } from "react-icons/ai";
 
-import { MdClose, MdOutlineFiberNew } from "react-icons/md";
+import { MdClose, MdOutlineFiberNew, MdOutlineWatchLater } from "react-icons/md";
 
 // Platform icons mapping
 const PLATFORM_ICONS = {
@@ -119,7 +119,7 @@ function GameList({
     const sortOptions = [
         { value: 'date-added', label: 'echa añadido', icon: <GiHamburgerMenu /> },
         { value: 'newest', label: 'Más nuevos', icon: <MdOutlineFiberNew /> },
-        { value: 'oldest', label: 'Más antiguos', icon: '⏰' },
+        { value: 'oldest', label: 'Más antiguos', icon: <MdOutlineWatchLater /> },
         { value: 'rating-high', label: 'Mayor valoración', icon: <AiOutlineRise /> },
         { value: 'rating-low', label: 'Menor valoración', icon: <AiOutlineFall /> },
         { value: 'name', label: 'A-Z', icon: <FaSortAlphaDown /> }
