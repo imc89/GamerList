@@ -1,26 +1,6 @@
 .app {
   min-height: 100vh;
-  /* Deep Gamer Morphing Gradient: Dark Blue -> Vibrant Purple -> Pink -> Cyan -> Dark Blue */
-  background: linear-gradient(-45deg, #020024, #090979, #790973, #00d4ff);
-  background-size: 400% 400%;
-  animation: gradientBG 12s ease infinite;
-  color: var(--color-text-primary);
-  position: relative;
-  z-index: 0;
-}
-
-@keyframes gradientBG {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
+  background: var(--color-bg-primary);
 }
 
 .collection-header {
