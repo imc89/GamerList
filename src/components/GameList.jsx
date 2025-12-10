@@ -63,12 +63,12 @@ function GameList({ groupedGames, gameCount, onRemove }) {
     };
 
     const sortOptions = [
-        { value: 'date-added', label: '📅 Fecha añadido', icon: '📅' },
-        { value: 'newest', label: '🆕 Más nuevos', icon: '🆕' },
-        { value: 'oldest', label: '⏰ Más antiguos', icon: '⏰' },
-        { value: 'rating-high', label: '⭐ Mayor valoración', icon: '⭐' },
-        { value: 'rating-low', label: '📉 Menor valoración', icon: '📉' },
-        { value: 'name', label: '🔤 A-Z', icon: '🔤' }
+        { value: 'date-added', label: 'echa añadido', icon: '📅' },
+        { value: 'newest', label: 'Más nuevos', icon: '🆕' },
+        { value: 'oldest', label: 'Más antiguos', icon: '⏰' },
+        { value: 'rating-high', label: 'Mayor valoración', icon: '⭐' },
+        { value: 'rating-low', label: 'Menor valoración', icon: '📉' },
+        { value: 'name', label: 'A-Z', icon: '🔤' }
     ];
 
     const currentSort = sortOptions.find(opt => opt.value === sortBy);
