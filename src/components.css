@@ -245,10 +245,10 @@
     border-right-color: #9d4edd;
     border-radius: 50%;
     margin: 0;
-    animation: spin-glow 1s linear infinite;
+    animation: spin-centered 1s linear infinite;
 }
 
-@keyframes spin-glow {
+@keyframes spin-centered {
     0% {
         transform: translateY(-50%) rotate(0deg);
         filter: hue-rotate(0deg);
@@ -256,6 +256,18 @@
 
     100% {
         transform: translateY(-50%) rotate(360deg);
+        filter: hue-rotate(360deg);
+    }
+}
+
+@keyframes spin-glow {
+    0% {
+        transform: rotate(0deg);
+        filter: hue-rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
         filter: hue-rotate(360deg);
     }
 }
@@ -723,10 +735,17 @@
 }
 
 .game-detail-content {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
+    display: flex;
     gap: var(--spacing-2xl);
     padding: var(--spacing-2xl);
+    align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+    .game-detail-content {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
 .game-detail-image {

@@ -3,6 +3,7 @@ import { FaPhotoVideo, FaArrowLeft } from "react-icons/fa";
 
 function GameDetailModal({ game, onClose }) {
     const [view, setView] = useState('details'); // 'details' or 'media'
+    const [selectedImage, setSelectedImage] = useState(null);
 
     // Close on ESC key
     useEffect(() => {
@@ -55,7 +56,14 @@ function GameDetailModal({ game, onClose }) {
                                     <h3>Imágenes</h3>
                                     <div className="screenshot-grid">
                                         {game.screenshots.map((url, idx) => (
-                                            <img key={idx} src={url} alt={`Screenshot ${idx + 1}`} className="game-screenshot" loading="lazy" />
+                                            <img
+                                                key={idx}
+                                                src={url}
+                                                alt={`Screenshot ${idx + 1}`}
+                                                className="game-screenshot"
+                                                loading="lazy"
+                                                onClick={() => setSelectedImage(url)}
+                                            />
                                         ))}
                                     </div>
                                 </div>
@@ -138,6 +146,19 @@ function GameDetailModal({ game, onClose }) {
                     </div>
                 )}
             </div>
+
+            {/* Lightbox Overlay */}
+            {selectedImage && (
+                <div className="lightbox-overlay" onClick={() => setSelectedImage(null)}>
+                    <button className="lightbox-close" onClick={() => setSelectedImage(null)}>✕</button>
+                    <img
+                        src={selectedImage}
+                        alt="Fullscreen"
+                        className="lightbox-image"
+                        onClick={(e) => e.stopPropagation()}
+                    />
+                </div>
+            )}
         </div>
     );
 }
