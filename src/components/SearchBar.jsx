@@ -43,6 +43,28 @@ function SearchBar({ onGameAdd }) {
         setSearched(false); // Reset searched state
     };
 
+    const inputRef = useRef(null);
+
+    // Keyboard shortcut to focus search
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                inputRef.current?.focus();
+            }
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
+    // Clear search
+    const handleClear = () => {
+        setQuery('');
+        setResults([]);
+        setSearched(false);
+        inputRef.current?.focus();
+    };
+
     return (
         <>
             <div className="search-section">
@@ -58,12 +80,18 @@ function SearchBar({ onGameAdd }) {
                     <div className="search-bar" ref={searchBarRef}>
                         <span className="search-icon">🔍</span>
                         <input
+                            ref={inputRef}
                             type="text"
                             className="search-input"
-                            placeholder="Buscar juegos..."
+                            placeholder="Buscar juegos... (⌘K)"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
                         />
+                        {query && !loading && (
+                            <button className="search-clear-btn" onClick={handleClear} title="Borrar búsqueda">
+                                ✕
+                            </button>
+                        )}
                         {loading && <div className="search-loading"></div>}
                     </div>
                 </div>
