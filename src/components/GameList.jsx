@@ -23,20 +23,20 @@ import { MdClose, MdOutlineFiberNew, MdOutlineWatchLater } from "react-icons/md"
 
 // Platform icons mapping
 const PLATFORM_ICONS = {
-    'PC': <FaWindows />,
-    "Mac": <SiApple />,
-    "iOS": <SiIos />,
-    "XONE": <FaXbox />,
+    'PC': <FaWindows style={{ fontSize: '3rem', marginBottom: '1rem' }} />,
+    "Mac": <SiApple style={{ fontSize: '3rem', marginBottom: '1rem' }} />,
+    "iOS": <SiIos style={{ fontSize: '3rem', marginBottom: '1rem' }} />,
+    "XONE": <FaXbox style={{ fontSize: '3rem', marginBottom: '1rem' }} />,
     'PS5': <SiPlaystation5 />,
     'PS4': <SiPlaystation4 />,
-    'Linux': <FaWindows />,
-    'Series X|S': <FaXbox />,
-    'Xbox One': <FaXbox />,
-    'Wii': <SiWii />,
-    'WiiU': <SiWiiu />,
-    "Switch": <SiNintendoswitch />,
-    'Switch 2': <SiNintendoswitch />,
-    'DOS': <SiRetroarch />
+    'Linux': <FaWindows style={{ fontSize: '3rem', marginBottom: '1rem' }} />,
+    'Series X|S': <FaXbox style={{ fontSize: '3rem', marginBottom: '1rem' }} />,
+    'Xbox One': <FaXbox style={{ fontSize: '3rem', marginBottom: '1rem' }} />,
+    'Wii': <SiWii style={{ fontSize: '3rem', marginBottom: '1rem' }} />,
+    'WiiU': <SiWiiu style={{ fontSize: '3rem', marginBottom: '1rem' }} />,
+    "Switch": <SiNintendoswitch style={{ fontSize: '3rem', marginBottom: '1rem' }} />,
+    'Switch 2': <SiNintendoswitch style={{ fontSize: '3rem', marginBottom: '1rem' }} />,
+    'DOS': <SiRetroarch style={{ fontSize: '3rem', marginBottom: '1rem' }} />,
 };
 
 function GameList({

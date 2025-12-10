@@ -149,19 +149,6 @@ function GameDetailModal({ game, onClose, isAdded, onRemove, onAdd }) {
                                 </div>
                             )}
 
-                            {game.genres && game.genres.length > 0 && (
-                                <div className="game-detail-meta">
-                                    <span className="meta-label">🎯 Géneros:</span>
-                                    <div className="game-detail-genres">
-                                        {game.genres.map((genre, idx) => (
-                                            <span key={idx} className="genre-badge">
-                                                {genre}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
                             {game.summary && (
                                 <div className="game-detail-summary">
                                     <h3>Descripción</h3>
