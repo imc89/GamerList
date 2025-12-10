@@ -11,18 +11,7 @@ function GameCard({ game, onAdd, onRemove, showRemove = false, onCardClick, isAd
             className={showRemove ? 'collection-game-card' : 'game-card'}
             onClick={handleCardClick}
         >
-            {showRemove && (
-                <button
-                    className="btn-remove"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onRemove(game.id, game.platform);
-                    }}
-                    title="Eliminar de la colección"
-                >
-                    ✕
-                </button>
-            )}
+
 
             <div className="game-card-image">
                 {game.coverUrl ? (
