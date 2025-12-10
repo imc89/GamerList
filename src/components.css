@@ -1019,6 +1019,7 @@
 }
 
 .collection-game-card {
+    cursor: pointer;
     position: relative;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     backdrop-filter: blur(10px);
@@ -1285,6 +1286,13 @@
     left: 0;
     width: 100%;
     height: 100%;
+}
+
+@media (min-width: 769px) {
+    .video-container iframe {
+        height: 70%;
+        top: 15%;
+    }
 }
 
 .screenshot-grid {
