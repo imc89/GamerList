@@ -57,7 +57,15 @@ function GameCard({ game, onAdd, onRemove, showRemove = false, onCardClick, isAd
                 {!showRemove && (
                     <div className="game-card-actions">
                         {isAdded ? (
-                            <span className="badge-added">✅ AÑADIDO</span>
+                            <button
+                                className="btn-added-toggle"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onRemove(game.id);
+                                }}
+                            >
+                                AÑADIDO
+                            </button>
                         ) : (
                             <button
                                 className="btn-add"

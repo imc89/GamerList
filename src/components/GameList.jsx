@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import GameCard from './GameCard';
 import GameDetailModal from './GameDetailModal';
+import SearchResults from './SearchResults';
 import { exportData, importJsonData } from '../services/storageService';
 
 import {
@@ -30,7 +31,18 @@ const PLATFORM_ICONS = {
     'DOS': <SiRetroarch />
 };
 
-function GameList({ groupedGames, gameCount, onRemove }) {
+function GameList({
+    groupedGames,
+    gameCount,
+    onRemove,
+    // Search props
+    searchResults,
+    searchLoading,
+    searchSearched,
+    onGameAdd,
+    onGameRemoveFromSearch,
+    addedGameIds
+}) {
     const [selectedGame, setSelectedGame] = useState(null);
     const [sortBy, setSortBy] = useState('date-added');
     const [showSortMenu, setShowSortMenu] = useState(false);
@@ -176,6 +188,19 @@ function GameList({ groupedGames, gameCount, onRemove }) {
                         />
                     </div>
                 </div>
+
+                {/* Search Results inserted here */}
+                {(searchSearched || searchLoading) && (
+                    <div className="search-results-container" style={{ marginBottom: '2rem' }}>
+                        <SearchResults
+                            results={searchResults}
+                            loading={searchLoading}
+                            onGameAdd={onGameAdd}
+                            onGameRemove={onGameRemoveFromSearch}
+                            addedGameIds={addedGameIds}
+                        />
+                    </div>
+                )}
 
                 {platforms.length === 0 ? (
                     <div className="empty-collection">
