@@ -11,6 +11,7 @@ import {
     SiApple,
     SiRetroarch
 } from "react-icons/si";
+import { GiCardExchange, GiHamburgerMenu } from "react-icons/gi";
 import { FaWindows, FaXbox, FaFileImport, FaFileExport } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 
@@ -101,7 +102,7 @@ function GameList({ groupedGames, gameCount, onRemove }) {
     };
 
     const sortOptions = [
-        { value: 'date-added', label: 'echa añadido', icon: '📅' },
+        { value: 'date-added', label: 'echa añadido', icon: <GiHamburgerMenu /> },
         { value: 'newest', label: 'Más nuevos', icon: '🆕' },
         { value: 'oldest', label: 'Más antiguos', icon: '⏰' },
         { value: 'rating-high', label: 'Mayor valoración', icon: '⭐' },
@@ -162,7 +163,7 @@ function GameList({ groupedGames, gameCount, onRemove }) {
                         </div>
 
                         <button className="action-button" onClick={() => setShowDataModal(true)} title="Opciones de datos">
-                            <span className="action-icon">💾</span>
+                            <span className="action-icon"><GiCardExchange /></span>
                             <span className="action-label">Datos</span>
                         </button>
 

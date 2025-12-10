@@ -37,10 +37,12 @@ function SearchBar({ onGameAdd }) {
 
     // Clear search input after adding a game
     const handleGameAdd = (game) => {
-        onGameAdd(game);
-        setQuery(''); // Clear input
-        setResults([]); // Clear results
-        setSearched(false); // Reset searched state
+        const clearSearch = () => {
+            setQuery(''); // Clear input
+            setResults([]); // Clear results
+            setSearched(false); // Reset searched state
+        };
+        onGameAdd(game, clearSearch);
     };
 
     const inputRef = useRef(null);

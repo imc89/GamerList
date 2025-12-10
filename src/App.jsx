@@ -17,6 +17,7 @@ function App() {
   const [gameCount, setGameCount] = useState(0);
   const [selectedGame, setSelectedGame] = useState(null);
   const [showPlatformSelector, setShowPlatformSelector] = useState(false);
+  const [searchClearCallback, setSearchClearCallback] = useState(null);
 
   // Load collection on mount
   useEffect(() => {
@@ -29,8 +30,9 @@ function App() {
     setGameCount(getGameCount());
   };
 
-  const handleGameAdd = (game) => {
+  const handleGameAdd = (game, onSuccess) => {
     setSelectedGame(game);
+    setSearchClearCallback(() => onSuccess);
     setShowPlatformSelector(true);
   };
 
@@ -41,8 +43,27 @@ function App() {
       loadCollection();
       setShowPlatformSelector(false);
       setSelectedGame(null);
+
+      // Clear search results only on success
+      if (searchClearCallback) {
+        searchClearCallback();
+        setSearchClearCallback(null);
+      }
     } else {
       alert(result.message);
+      // Do not clear search (keep callback for potential retry or just user cancels)
+      // Actually if it fails, we usually stay in modal or close it? 
+      // PlatformSelector stays open? 
+      // If alert happens, usually imply we stay? 
+      // But currently PlatformSelector handles confirm.
+      // If I want to close selector on error?
+      // "Este juego ya está en tu colección". User says "Ok". 
+      // Selector should probably close or let user choose another platform?
+      // Logic from before: alert and... stay?
+      // The previous code had: if(success) ... else alert.
+      // So on error, it does nothing else. Modal stays open or closes?
+      // PlatformSelector calls onConfirm. It doesn't close itself.
+      // So UI stays open.
     }
   };
 
@@ -59,6 +80,7 @@ function App() {
   const handlePlatformCancel = () => {
     setShowPlatformSelector(false);
     setSelectedGame(null);
+    setSearchClearCallback(null); // Clear callback without calling it
   };
 
   return (
