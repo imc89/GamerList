@@ -131,6 +131,58 @@ export function clearAllGames() {
     }
 }
 
+// Export data to JSON
+export function exportData() {
+    try {
+        const games = getGames();
+        const dataStr = JSON.stringify(games, null, 2);
+        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+
+        const exportFileDefaultName = `gamerlist-backup-${new Date().toISOString().slice(0, 10)}.json`;
+
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.click();
+
+        return { success: true, message: 'Datos exportados correctamente' };
+    } catch (error) {
+        console.error('Error exporting data:', error);
+        return { success: false, message: 'Error al exportar los datos' };
+    }
+}
+
+// Import data from JSON
+export function importJsonData(jsonData) {
+    try {
+        let parsedData;
+        if (typeof jsonData === 'string') {
+            parsedData = JSON.parse(jsonData);
+        } else {
+            parsedData = jsonData;
+        }
+
+        // Simple validation: check if it's an array
+        if (!Array.isArray(parsedData)) {
+            return { success: false, message: 'Archivo inválido: debe ser una lista de juegos' };
+        }
+
+        // Optional: Check if items have basic required props like 'id' and 'name'
+        const validGames = parsedData.every(g => g.id && g.name && g.platform);
+        if (!validGames) {
+            return { success: false, message: 'Archivo inválido: formato de juego incorrecto' };
+        }
+
+        // Save to local storage
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedData));
+
+        return { success: true, message: 'Datos importados correctamente' };
+    } catch (error) {
+        console.error('Error importing data:', error);
+        return { success: false, message: 'Error al procesar el archivo de importación' };
+    }
+}
+
 export default {
     PLATFORMS,
     getGames,
@@ -139,5 +191,7 @@ export default {
     getGamesByPlatform,
     hasGame,
     getGameCount,
-    clearAllGames
+    clearAllGames,
+    exportData,
+    importJsonData
 };

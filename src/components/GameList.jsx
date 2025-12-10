@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import GameCard from './GameCard';
 import GameDetailModal from './GameDetailModal';
+import { exportData, importJsonData } from '../services/storageService';
 
 import {
     SiPlaystation5,
@@ -32,6 +33,7 @@ function GameList({ groupedGames, gameCount, onRemove }) {
     const [sortBy, setSortBy] = useState('date-added');
     const [showSortMenu, setShowSortMenu] = useState(false);
     const sortMenuRef = useRef(null);
+    const fileInputRef = useRef(null);
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -43,6 +45,36 @@ function GameList({ groupedGames, gameCount, onRemove }) {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    const handleExport = () => {
+        const result = exportData();
+        if (result.success) {
+            // Optional: User feedback could be better than alert, but alert works for now
+            // alert(result.message);
+        } else {
+            alert(result.message);
+        }
+    };
+
+    const handleImport = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const content = e.target.result;
+            const result = importJsonData(content);
+            if (result.success) {
+                alert('Colección importada con éxito. La página se recargará.');
+                window.location.reload();
+            } else {
+                alert(result.message);
+            }
+        };
+        reader.readAsText(file);
+        // Reset input
+        event.target.value = '';
+    };
 
     const platforms = Object.keys(groupedGames);
 
@@ -100,33 +132,52 @@ function GameList({ groupedGames, gameCount, onRemove }) {
                         )}
                     </div>
 
-                    <div className="sort-dropdown" ref={sortMenuRef}>
-                        <button
-                            className="sort-button"
-                            onClick={() => setShowSortMenu(!showSortMenu)}
-                        >
-                            <span>{currentSort.icon}</span>
-                            <span className="sort-label">Ordenar</span>
+                    <div className="collection-actions">
+                        <div className="sort-dropdown" ref={sortMenuRef}>
+                            <button
+                                className="sort-button"
+                                onClick={() => setShowSortMenu(!showSortMenu)}
+                            >
+                                <span>{currentSort.icon}</span>
+                                <span className="sort-label">Ordenar</span>
+                            </button>
+
+                            {showSortMenu && (
+                                <div className="sort-menu">
+                                    {sortOptions.map(option => (
+                                        <button
+                                            key={option.value}
+                                            className={`sort-option ${sortBy === option.value ? 'active' : ''}`}
+                                            onClick={() => {
+                                                setSortBy(option.value);
+                                                setShowSortMenu(false);
+                                            }}
+                                        >
+                                            <span className="sort-option-icon">{option.icon}</span>
+                                            <span>{option.label}</span>
+                                            {sortBy === option.value && <span className="checkmark">✓</span>}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        <button className="action-button export-btn" onClick={handleExport} title="Exportar colección">
+                            <span className="action-icon">📤</span>
+                            <span className="action-label">Exportar</span>
                         </button>
 
-                        {showSortMenu && (
-                            <div className="sort-menu">
-                                {sortOptions.map(option => (
-                                    <button
-                                        key={option.value}
-                                        className={`sort-option ${sortBy === option.value ? 'active' : ''}`}
-                                        onClick={() => {
-                                            setSortBy(option.value);
-                                            setShowSortMenu(false);
-                                        }}
-                                    >
-                                        <span className="sort-option-icon">{option.icon}</span>
-                                        <span>{option.label}</span>
-                                        {sortBy === option.value && <span className="checkmark">✓</span>}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
+                        <button className="action-button import-btn" onClick={() => fileInputRef.current?.click()} title="Importar colección">
+                            <span className="action-icon">📥</span>
+                            <span className="action-label">Importar</span>
+                        </button>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            style={{ display: 'none' }}
+                            accept=".json"
+                            onChange={handleImport}
+                        />
                     </div>
                 </div>
 
