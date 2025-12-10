@@ -50,6 +50,9 @@ function SearchResults({ results, loading, onGameAdd, onGameRemove, addedGameIds
                 <GameDetailModal
                     game={selectedGame}
                     onClose={() => setSelectedGame(null)}
+                    isAdded={addedGameIds?.has(selectedGame.id)}
+                    onAdd={onGameAdd}
+                    onRemove={() => onGameRemove(selectedGame.id)}
                 />
             )}
         </>
