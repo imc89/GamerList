@@ -4,7 +4,7 @@ import { FaRankingStar } from "react-icons/fa6";
 import { HiCalendarDateRange } from "react-icons/hi2";
 import { IoLogoGameControllerB } from "react-icons/io";
 
-function GameDetailModal({ game, onClose, isAdded, onRemove }) {
+function GameDetailModal({ game, onClose, isAdded, onRemove, onAdd }) {
     const [view, setView] = useState('details'); // 'details' or 'media'
     const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
@@ -100,9 +100,13 @@ function GameDetailModal({ game, onClose, isAdded, onRemove }) {
                             </div>
 
                             <div className="modal-actions-col">
-                                {isAdded && (
+                                {isAdded ? (
                                     <button className="btn-remove-list" onClick={onRemove}>
                                         ELIMINAR DEL LISTADO
+                                    </button>
+                                ) : (
+                                    <button className="btn-add-list" onClick={() => onAdd(game)}>
+                                        AÑADIR AL LISTADO
                                     </button>
                                 )}
 

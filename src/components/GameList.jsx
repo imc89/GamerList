@@ -267,6 +267,7 @@ function GameList({
                     onClose={() => setSelectedGame(null)}
                     isAdded={addedGameIds.has(selectedGame.id)}
                     onRemove={handleModalRemove}
+                    onAdd={onGameAdd}
                 // If opening from collection, selectedGame has platform. 
                 // But checking ID in addedGameIds is safe to see if it exists at all.
                 />
