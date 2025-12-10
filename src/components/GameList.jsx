@@ -56,6 +56,20 @@ function GameList({
     const sortMenuRef = useRef(null);
     const fileInputRef = useRef(null);
 
+    const [collapsedPlatforms, setCollapsedPlatforms] = useState(new Set());
+
+    const togglePlatform = (platform) => {
+        setCollapsedPlatforms(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(platform)) {
+                newSet.delete(platform);
+            } else {
+                newSet.add(platform);
+            }
+            return newSet;
+        });
+    };
+
     // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -233,28 +247,39 @@ function GameList({
                         const games = groupedGames[platform];
                         const sortedGames = sortGames(games);
                         const icon = PLATFORM_ICONS[platform] || '🎮';
+                        const isCollapsed = collapsedPlatforms.has(platform);
 
                         return (
                             <div key={platform} className="platform-group">
                                 <div className="platform-header">
                                     <span className="platform-icon">{icon}</span>
                                     {/* <h2 className="platform-title">{platform}</h2> */}
-                                    <span className="platform-game-count">
+                                    <span
+                                        className="platform-game-count"
+                                        onClick={() => togglePlatform(platform)}
+                                        title={isCollapsed ? "Mostrar juegos" : "Ocultar juegos"}
+                                        style={{ cursor: 'pointer', userSelect: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}
+                                    >
                                         {games.length}
+                                        <span style={{ fontSize: '0.9em', opacity: 0.8 }}>
+                                            {isCollapsed ? '▼' : '▲'}
+                                        </span>
                                     </span>
                                 </div>
 
-                                <div className="collection-grid">
-                                    {sortedGames.map(game => (
-                                        <GameCard
-                                            key={`${game.id}-${platform}`}
-                                            game={game}
-                                            onRemove={onRemove}
-                                            showRemove={true}
-                                            onCardClick={setSelectedGame}
-                                        />
-                                    ))}
-                                </div>
+                                {!isCollapsed && (
+                                    <div className="collection-grid">
+                                        {sortedGames.map(game => (
+                                            <GameCard
+                                                key={`${game.id}-${platform}`}
+                                                game={game}
+                                                onRemove={onRemove}
+                                                showRemove={true}
+                                                onCardClick={setSelectedGame}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         );
                     })
