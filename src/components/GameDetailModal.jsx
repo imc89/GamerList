@@ -105,8 +105,8 @@ function GameDetailModal({ game, onClose, isAdded, onRemove, onAdd }) {
                                         ELIMINAR DEL LISTADO
                                     </button>
                                 ) : (
-                                    <button className="btn-add-list" onClick={() => onAdd(game)}>
-                                        AÑADIR AL LISTADO
+                                    <button className="btn-add" onClick={() => onAdd(game)}>
+                                        ➕ Añadir a colección
                                     </button>
                                 )}
 
