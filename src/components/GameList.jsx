@@ -7,7 +7,8 @@ import { exportData, importJsonData } from '../services/storageService';
 import {
     SiPlaystation5,
     SiPlaystation4,
-    SiNintendo,
+    SiWii,
+    SiWiiu,
     SiNintendoswitch,
     SiApple,
     SiRetroarch
@@ -29,6 +30,8 @@ const PLATFORM_ICONS = {
     'Linux': <FaWindows />,
     'Series X|S': <FaXbox />,
     'Xbox One': <FaXbox />,
+    'Wii': <SiWii />,
+    'WiiU': <SiWiiu />,
     "Switch": <SiNintendoswitch />,
     'Switch 2': <SiNintendoswitch />,
     'DOS': <SiRetroarch />
