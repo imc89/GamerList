@@ -3,7 +3,7 @@ import { searchGames as apiSearchGames } from '../services/igdbService';
 import SearchResults from './SearchResults';
 import logoImage from '/ios/Icon-iOS-Dark-60x60@3x.png';
 
-function SearchBar({ onGameAdd }) {
+function SearchBar({ onGameAdd, addedGameIds }) {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -99,12 +99,14 @@ function SearchBar({ onGameAdd }) {
                 </div>
             </div>
 
+            {/* Search Results */}
             {(searched || loading) && (
                 <div className="container">
                     <SearchResults
                         results={results}
                         loading={loading}
                         onGameAdd={handleGameAdd}
+                        addedGameIds={addedGameIds}
                     />
                 </div>
             )}

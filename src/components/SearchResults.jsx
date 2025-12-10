@@ -2,7 +2,7 @@ import { useState } from 'react';
 import GameCard from './GameCard';
 import GameDetailModal from './GameDetailModal';
 
-function SearchResults({ results, loading, onGameAdd }) {
+function SearchResults({ results, loading, onGameAdd, addedGameIds }) {
     const [selectedGame, setSelectedGame] = useState(null);
 
     if (loading) {
@@ -39,6 +39,7 @@ function SearchResults({ results, loading, onGameAdd }) {
                             game={game}
                             onAdd={onGameAdd}
                             onCardClick={setSelectedGame}
+                            isAdded={addedGameIds?.has(game.id)}
                         />
                     ))}
                 </div>

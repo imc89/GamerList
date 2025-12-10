@@ -239,7 +239,11 @@ function GameList({ groupedGames, gameCount, onRemove }) {
                         </div>
 
                         <div className="data-actions-grid">
-                            <button className="data-action-btn export-action" onClick={handleExport}>
+                            <button
+                                className="data-action-btn export-action"
+                                onClick={handleExport}
+                                disabled={gameCount === 0}
+                            >
                                 <FaFileExport className="data-icon" />
                                 <div className="data-btn-content">
                                     <h3>Exportar</h3>

@@ -1606,3 +1606,34 @@
         opacity: 1;
     }
 }
+
+/* Added game badge */
+.badge-added {
+    display: inline-block;
+    padding: 12px;
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 1px solid #10b981;
+    border-radius: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    width: 100%;
+    text-align: center;
+    cursor: default;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+}
+
+/* Disabled state for data buttons */
+.data-action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(0.8);
+    transform: none !important;
+    box-shadow: none !important;
+}

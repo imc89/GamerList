@@ -83,9 +83,17 @@ function App() {
     setSearchClearCallback(null); // Clear callback without calling it
   };
 
+  // Compute all added game IDs for checking status
+  const addedGameIds = new Set(
+    Object.values(collection).flat().map(g => g.id)
+  );
+
   return (
     <div className="app">
-      <SearchBar onGameAdd={handleGameAdd} />
+      <SearchBar
+        onGameAdd={handleGameAdd}
+        addedGameIds={addedGameIds}
+      />
 
       <div className="container">
         <GameList

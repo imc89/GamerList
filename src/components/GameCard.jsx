@@ -1,4 +1,4 @@
-function GameCard({ game, onAdd, onRemove, showRemove = false, onCardClick }) {
+function GameCard({ game, onAdd, onRemove, showRemove = false, onCardClick, isAdded }) {
     const handleCardClick = (e) => {
         // Only trigger if not clicking on buttons
         if (!e.target.closest('button')) {
@@ -56,15 +56,19 @@ function GameCard({ game, onAdd, onRemove, showRemove = false, onCardClick }) {
 
                 {!showRemove && (
                     <div className="game-card-actions">
-                        <button
-                            className="btn-add"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                onAdd(game);
-                            }}
-                        >
-                            ➕ Añadir a colección
-                        </button>
+                        {isAdded ? (
+                            <span className="badge-added">✅ AÑADIDO</span>
+                        ) : (
+                            <button
+                                className="btn-add"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onAdd(game);
+                                }}
+                            >
+                                ➕ Añadir a colección
+                            </button>
+                        )}
                     </div>
                 )}
             </div>
