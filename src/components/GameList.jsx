@@ -5,21 +5,20 @@ import GameDetailModal from './GameDetailModal';
 import {
     SiPlaystation5,
     SiPlaystation4,
-    SiXbox,
-    SiNintendoswitch,
-    SiWindows
+    SiNintendo,
+    SiRetroarch
 } from "react-icons/si";
-import { MdGamepad } from "react-icons/md";
+import { FaWindows, FaXbox } from "react-icons/fa";
 
 // Platform icons mapping
 const PLATFORM_ICONS = {
-    'PC': <SiWindows />,
+    'PC': <FaWindows />,
     'PlayStation 5': <SiPlaystation5 />,
     'PlayStation 4': <SiPlaystation4 />,
-    'Xbox Series X/S': <SiXbox />,
-    'Xbox One': <SiXbox />,
-    'Nintendo Switch': <SiNintendoswitch />,
-    'Retro/Other': <MdGamepad />
+    'Xbox Series X/S': <FaXbox />,
+    'Xbox One': <FaXbox />,
+    'Nintendo Switch': <SiNintendo />,
+    'Retro/Other': <SiRetroarch />
 };
 
 function GameList({ groupedGames, gameCount, onRemove }) {
