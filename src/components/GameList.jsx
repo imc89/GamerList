@@ -20,6 +20,7 @@ import { FaWindows, FaXbox, FaFileImport, FaFileExport, FaSortAlphaDown } from "
 import { AiOutlineRise, AiOutlineFall } from "react-icons/ai";
 
 import { MdClose, MdOutlineFiberNew, MdOutlineWatchLater } from "react-icons/md";
+import { PiResizeBold, PiResizeDuotone, PiResizeFill } from "react-icons/pi";
 
 // Platform icons mapping
 const PLATFORM_ICONS = {
@@ -52,6 +53,7 @@ function GameList({
     addedGameIds
 }) {
     const [selectedGame, setSelectedGame] = useState(null);
+    const [cardSize, setCardSize] = useState('large');
     const [sortBy, setSortBy] = useState('date-added');
     const [showSortMenu, setShowSortMenu] = useState(false);
     const [showDataModal, setShowDataModal] = useState(false);
@@ -164,7 +166,32 @@ function GameList({
             <div className="collection-section">
                 <div className="collection-header-controls">
                     <div className="collection-title-area">
-                        <h2 className="collection-title-main">Mi Colección</h2>
+                        <div className="collection-title-row">
+                            <h2 className="collection-title-main">Mi Colección</h2>
+                            <div className="resize-controls">
+                                <button
+                                    className={`resize-btn ${cardSize === 'small' ? 'active' : ''}`}
+                                    onClick={() => setCardSize('small')}
+                                    title="Vista pequeña"
+                                >
+                                    <PiResizeBold />
+                                </button>
+                                <button
+                                    className={`resize-btn ${cardSize === 'medium' ? 'active' : ''}`}
+                                    onClick={() => setCardSize('medium')}
+                                    title="Vista mediana"
+                                >
+                                    <PiResizeDuotone />
+                                </button>
+                                <button
+                                    className={`resize-btn ${cardSize === 'large' ? 'active' : ''}`}
+                                    onClick={() => setCardSize('large')}
+                                    title="Vista grande"
+                                >
+                                    <PiResizeFill />
+                                </button>
+                            </div>
+                        </div>
                         {gameCount > 0 && (
                             <p className="collection-count">
                                 {gameCount} juego{gameCount !== 1 ? 's' : ''} en total
@@ -272,7 +299,7 @@ function GameList({
                                 </div>
 
                                 {!isCollapsed && (
-                                    <div className="collection-grid">
+                                    <div className={`collection-grid ${cardSize}`}>
                                         {sortedGames.map(game => (
                                             <GameCard
                                                 key={`${game.id}-${platform}`}

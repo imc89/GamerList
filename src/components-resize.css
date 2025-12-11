@@ -1,0 +1,74 @@
+
+/* Resize Controls */
+.collection-title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.resize-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.resize-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.resize-btn:hover {
+    color: var(--color-text-primary);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.resize-btn.active {
+    color: var(--color-accent-primary);
+    background: rgba(0, 212, 255, 0.15);
+}
+
+/* Grid Variances */
+/* Large is default (already defined) */
+.collection-grid.large {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.collection-grid.medium {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+
+.collection-grid.small {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: var(--spacing-sm);
+}
+
+/* Adjustments for smaller cards */
+.collection-grid.small .collection-game-card {
+    border-radius: 12px;
+}
+
+.collection-grid.small .game-card-image {
+    font-size: 1rem;
+}
+
+.collection-grid.small .btn-remove {
+    width: 24px;
+    height: 24px;
+    padding: 4px;
+    font-size: 0.75rem;
+    top: 4px;
+    right: 4px;
+}
