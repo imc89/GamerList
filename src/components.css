@@ -151,14 +151,38 @@
         gap: var(--spacing-sm);
     }
 
-    .sort-button {
+    /* Update: Center action buttons on mobile, keep in row, smaller size */
+    .collection-actions {
         width: 100%;
         justify-content: center;
+        gap: 8px;
+    }
+
+    .sort-button,
+    .action-button {
+        padding: 0.6rem 1rem;
+        /* Smaller padding */
+        font-size: 0.9rem;
+        /* Smaller text */
+        justify-content: center;
+        flex: 1;
+        /* Distribute space evenly if needed, or remove if just centering */
+        min-width: auto;
+        /* Allow shrinking */
+    }
+
+    .sort-button {
+        width: auto;
+        /* Let it flow with others or be full width? User said "row center" */
+        flex: 0 1 auto;
+        /* Don't force full width */
     }
 
     .sort-menu {
         right: 0;
-        left: 0;
+        /* Align right or center? */
+        left: auto;
+        min-width: 200px;
     }
 }
 
