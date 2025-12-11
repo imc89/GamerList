@@ -20,7 +20,7 @@ import { FaWindows, FaXbox, FaFileImport, FaFileExport, FaSortAlphaDown } from "
 import { AiOutlineRise, AiOutlineFall } from "react-icons/ai";
 
 import { MdClose, MdOutlineFiberNew, MdOutlineWatchLater } from "react-icons/md";
-import { PiResizeBold, PiResizeDuotone, PiResizeFill } from "react-icons/pi";
+import { PiResizeThin, PiResizeDuotone, PiResizeFill } from "react-icons/pi";
 
 // Platform icons mapping
 const PLATFORM_ICONS = {
@@ -174,7 +174,7 @@ function GameList({
                                     onClick={() => setCardSize('small')}
                                     title="Vista pequeña"
                                 >
-                                    <PiResizeBold />
+                                    <PiResizeThin />
                                 </button>
                                 <button
                                     className={`resize-btn ${cardSize === 'medium' ? 'active' : ''}`}

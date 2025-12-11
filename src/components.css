@@ -1793,3 +1793,18 @@
     top: 4px;
     right: 4px;
 }
+
+/* Mobile Resize Adjustments */
+@media (max-width: 600px) {
+    .collection-grid.large {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+    }
+
+    .collection-grid.medium {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
+    }
+
+    .collection-grid.small {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)) !important;
+    }
+}
