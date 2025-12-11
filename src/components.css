@@ -1833,12 +1833,19 @@
     }
 }
 
-/* Stats Modal Styles */
-.stats-dashboard {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding-top: 1rem;
+
+.stats-modal {
+    max-width: 800px;
+    max-height: 85vh;
+    overflow-y: auto;
+    width: 90%;
+    /* Better for mobile than 100% */
+}
+
+display: flex;
+flex-direction: column;
+gap: 2rem;
+padding-top: 1rem;
 }
 
 .stats-summary-grid {

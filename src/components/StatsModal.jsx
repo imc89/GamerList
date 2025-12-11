@@ -50,7 +50,7 @@ function StatsModal({ groupedGames, onClose }) {
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: '800px' }}>
+            <div className="modal stats-modal" onClick={e => e.stopPropagation()}>
                 <button className="modal-close-btn" onClick={onClose}>
                     <MdClose />
                 </button>
