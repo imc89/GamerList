@@ -240,6 +240,7 @@ function GameList({
 
                         <button className="action-button" onClick={() => setShowStatsModal(true)} title="Estadísticas de colección">
                             <span className="action-icon"><MdQueryStats /></span>
+                            <span className="action-label">Estadísticas</span>
                         </button>
 
                         <button className="action-button" onClick={() => setShowDataModal(true)} title="Opciones de datos">

@@ -6,15 +6,32 @@ function StatsModal({ groupedGames, onClose }) {
     const totalGames = Object.values(groupedGames).reduce((acc, games) => acc + games.length, 0);
     const platformCount = Object.keys(groupedGames).length;
 
-    // Sort platforms by count for chart/list
-    const platformStats = Object.keys(groupedGames)
-        .map(platform => ({
-            name: platform,
-            count: groupedGames[platform].length
-        }))
-        .sort((a, b) => b.count - a.count);
+    // Calculate Top 3 "Recent Gems"
+    // 1. Flatten all games
+    const allGames = Object.values(groupedGames).flat();
 
-    const topPlatform = platformStats.length > 0 ? platformStats[0] : null;
+    // 2. Sort by addedDate (newest first) to find "recents"
+    // We look at the last 20 added games to find the gems among them
+    const recentGames = [...allGames]
+        .sort((a, b) => new Date(b.addedDate || 0) - new Date(a.addedDate || 0))
+        .slice(0, 20);
+
+    // 3. Sort these by rating (desc)
+    const topRecentGames = recentGames
+        .filter(g => g.rating) // Must have rating
+        .sort((a, b) => b.rating - a.rating);
+
+    // 4. Deduplicate (by ID) and take top 3
+    const uniqueTopGames = [];
+    const seenIds = new Set();
+
+    for (const game of topRecentGames) {
+        if (!seenIds.has(game.id)) {
+            uniqueTopGames.push(game);
+            seenIds.add(game.id);
+            if (uniqueTopGames.length === 3) break;
+        }
+    }
 
     return (
         <div className="modal-overlay" onClick={onClose}>
@@ -74,6 +91,34 @@ function StatsModal({ groupedGames, onClose }) {
                             })}
                         </div>
                     </div>
+
+                    {/* Top Recent Gems Section */}
+                    {uniqueTopGames.length > 0 && (
+                        <div className="stats-section">
+                            <h3>Joyas Recientes (Top 3)</h3>
+                            <div className="top-games-grid">
+                                {uniqueTopGames.map((game, idx) => (
+                                    <div key={game.id} className="top-game-card">
+                                        <div className="rank-badge">#{idx + 1}</div>
+                                        <div className="top-game-cover">
+                                            {game.coverUrl ? (
+                                                <img src={game.coverUrl} alt={game.name} />
+                                            ) : (
+                                                <div className="placeholder">🎮</div>
+                                            )}
+                                        </div>
+                                        <div className="top-game-info">
+                                            <div className="top-game-name">{game.name}</div>
+                                            <div className="top-game-meta">
+                                                <span className="rating-badge">★ {Math.round(game.rating)}</span>
+                                                <span className="platform-tag">{game.platform}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -199,6 +244,97 @@ function StatsModal({ groupedGames, onClose }) {
                     margin-left: 4px;
                 }
 
+                /* Top Gems Styles */
+                .top-games-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                    gap: 1rem;
+                }
+
+                .top-game-card {
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 12px;
+                    padding: 10px;
+                    display: flex;
+                    gap: 10px;
+                    align-items: center;
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                .rank-badge {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    background: #ffd700;
+                    color: black;
+                    font-weight: bold;
+                    font-size: 0.8rem;
+                    padding: 2px 6px;
+                    border-bottom-right-radius: 8px;
+                    z-index: 2;
+                }
+
+                .top-game-cover {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    flex-shrink: 0;
+                    background: #0f172a;
+                }
+
+                .top-game-cover img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+                
+                .top-game-cover .placeholder {
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.5rem;
+                }
+
+                .top-game-info {
+                    flex: 1;
+                    min-width: 0;
+                }
+
+                .top-game-name {
+                    font-size: 0.9rem;
+                    font-weight: 700;
+                    color: white;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    margin-bottom: 4px;
+                }
+
+                .top-game-meta {
+                    display: flex;
+                    gap: 8px;
+                    align-items: center;
+                }
+
+                .rating-badge {
+                    font-size: 0.75rem;
+                    color: #ffd700;
+                    font-weight: 600;
+                }
+
+                .platform-tag {
+                    font-size: 0.65rem;
+                    color: #94a3b8;
+                    background: rgba(255,255,255,0.1);
+                    padding: 1px 4px;
+                    border-radius: 4px;
+                }
+
                 @media (max-width: 600px) {
                     .stat-card {
                         padding: 1rem;
@@ -209,6 +345,9 @@ function StatsModal({ groupedGames, onClose }) {
                     .stat-row-label {
                         width: 70px;
                         font-size: 0.8rem;
+                    }
+                    .top-games-grid {
+                         grid-template-columns: 1fr;
                     }
                 }
             `}</style>
