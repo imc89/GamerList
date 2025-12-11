@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import GameCard from './GameCard';
 import GameDetailModal from './GameDetailModal';
 import SearchResults from './SearchResults';
+import StatsModal from './StatsModal';
 import { exportData, importJsonData } from '../services/storageService';
 
 import {
@@ -19,7 +20,7 @@ import { GiCardExchange, GiHamburgerMenu } from "react-icons/gi";
 import { FaWindows, FaXbox, FaFileImport, FaFileExport, FaSortAlphaDown } from "react-icons/fa";
 import { AiOutlineRise, AiOutlineFall } from "react-icons/ai";
 
-import { MdClose, MdOutlineFiberNew, MdOutlineWatchLater } from "react-icons/md";
+import { MdClose, MdOutlineFiberNew, MdOutlineWatchLater, MdQueryStats } from "react-icons/md";
 import { PiResizeThin, PiResizeDuotone, PiResizeFill } from "react-icons/pi";
 
 // Platform icons mapping
@@ -57,6 +58,7 @@ function GameList({
     const [sortBy, setSortBy] = useState('date-added');
     const [showSortMenu, setShowSortMenu] = useState(false);
     const [showDataModal, setShowDataModal] = useState(false);
+    const [showStatsModal, setShowStatsModal] = useState(false);
     const sortMenuRef = useRef(null);
     const fileInputRef = useRef(null);
 
@@ -236,6 +238,10 @@ function GameList({
                             )}
                         </div>
 
+                        <button className="action-button" onClick={() => setShowStatsModal(true)} title="Estadísticas de colección">
+                            <span className="action-icon"><MdQueryStats /></span>
+                        </button>
+
                         <button className="action-button" onClick={() => setShowDataModal(true)} title="Opciones de datos">
                             <span className="action-icon"><GiCardExchange /></span>
                             <span className="action-label">Datos</span>
@@ -326,6 +332,13 @@ function GameList({
                     onAdd={onGameAdd}
                 // If opening from collection, selectedGame has platform. 
                 // But checking ID in addedGameIds is safe to see if it exists at all.
+                />
+            )}
+
+            {showStatsModal && (
+                <StatsModal
+                    groupedGames={groupedGames}
+                    onClose={() => setShowStatsModal(false)}
                 />
             )}
 
