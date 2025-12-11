@@ -15,7 +15,19 @@ function PlatformSelector({ game, onConfirm, onCancel, initialSelection = [] }) 
     // The previous logic was: if game has platforms, show them, else show all. 
     // But for a "save to collection" feature, we usually want to map to OUR platforms.
     // Let's stick to showing ALL system platforms to give maximum flexibility.
-    const availablePlatforms = PLATFORMS;
+    // Logic for available platforms:
+    // 1. Start with game's native platforms (or ALL if unknown).
+    // 2. Add any platforms currently selected (initialSelection) to ensure they can be unchecked 
+    //    if they are not in the native list.
+    const nativePlatforms = game.platforms && game.platforms.length > 0 ? game.platforms : PLATFORMS;
+
+    const platformsToShow = new Set(nativePlatforms);
+    if (initialSelection) {
+        initialSelection.forEach(p => platformsToShow.add(p));
+    }
+
+    // Convert to array and sort for display
+    const availablePlatforms = Array.from(platformsToShow).sort();
 
     const togglePlatform = (platform) => {
         setSelectedPlatforms(prev => {
