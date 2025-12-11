@@ -119,7 +119,6 @@ function GameDetailModal({ game, onClose, isAdded, onRemove, onAdd }) {
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
-                                                color: '#fff',
                                                 transition: 'all 0.2s ease',
                                                 boxShadow: '0 2px 8px rgba(157, 78, 221, 0.2)'
                                             }}
