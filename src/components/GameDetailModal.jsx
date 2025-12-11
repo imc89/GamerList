@@ -3,6 +3,7 @@ import { FaPhotoVideo, FaArrowLeft, FaChevronLeft, FaChevronRight } from "react-
 import { FaRankingStar } from "react-icons/fa6";
 import { HiCalendarDateRange } from "react-icons/hi2";
 import { IoLogoGameControllerB } from "react-icons/io";
+import { GiConsoleController } from "react-icons/gi";
 
 function GameDetailModal({ game, onClose, isAdded, onRemove, onAdd }) {
     const [view, setView] = useState('details'); // 'details' or 'media'
@@ -132,7 +133,7 @@ function GameDetailModal({ game, onClose, isAdded, onRemove, onAdd }) {
                                             }}
                                             title="Editar plataformas/categorías"
                                         >
-                                            🎮
+                                            <GiConsoleController />
                                         </button>
                                     </div>
                                 ) : (
