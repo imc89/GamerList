@@ -2,23 +2,38 @@ import { MdClose, MdQueryStats } from "react-icons/md";
 import { FaGamepad, FaTrophy } from "react-icons/fa";
 
 function StatsModal({ groupedGames, onClose }) {
+    if (!groupedGames) return null;
+
     // Calculate Stats
-    const totalGames = Object.values(groupedGames).reduce((acc, games) => acc + games.length, 0);
-    const platformCount = Object.keys(groupedGames).length;
+    const totalGames = Object.values(groupedGames).reduce((acc, games) => acc + (games?.length || 0), 0);
+
+    // Sort platforms by count for chart/list
+    const platformStats = Object.keys(groupedGames)
+        .map(platform => ({
+            name: platform,
+            count: groupedGames[platform]?.length || 0
+        }))
+        .sort((a, b) => b.count - a.count);
+
+    const topPlatform = platformStats.length > 0 ? platformStats[0] : null;
 
     // Calculate Top 3 "Recent Gems"
-    // 1. Flatten all games
-    const allGames = Object.values(groupedGames).flat();
+    // 1. Flatten all games safely
+    const allGames = Object.values(groupedGames).flat().filter(g => g);
 
     // 2. Sort by addedDate (newest first) to find "recents"
     // We look at the last 20 added games to find the gems among them
     const recentGames = [...allGames]
-        .sort((a, b) => new Date(b.addedDate || 0) - new Date(a.addedDate || 0))
+        .sort((a, b) => {
+            const dateA = new Date(a.addedDate || 0);
+            const dateB = new Date(b.addedDate || 0);
+            return dateB - dateA;
+        })
         .slice(0, 20);
 
     // 3. Sort these by rating (desc)
     const topRecentGames = recentGames
-        .filter(g => g.rating) // Must have rating
+        .filter(g => g.rating && typeof g.rating === 'number') // Must have valid rating
         .sort((a, b) => b.rating - a.rating);
 
     // 4. Deduplicate (by ID) and take top 3
@@ -26,7 +41,7 @@ function StatsModal({ groupedGames, onClose }) {
     const seenIds = new Set();
 
     for (const game of topRecentGames) {
-        if (!seenIds.has(game.id)) {
+        if (game && game.id && !seenIds.has(game.id)) {
             uniqueTopGames.push(game);
             seenIds.add(game.id);
             if (uniqueTopGames.length === 3) break;
