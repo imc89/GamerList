@@ -101,9 +101,40 @@ function GameDetailModal({ game, onClose, isAdded, onRemove, onAdd }) {
 
                             <div className="modal-actions-col">
                                 {isAdded ? (
-                                    <button className="btn-remove-list" onClick={onRemove}>
-                                        ELIMINAR DEL LISTADO
-                                    </button>
+                                    <div style={{ display: 'flex', gap: '12px', width: '100%' }}>
+                                        <button className="btn-remove-list" onClick={onRemove} style={{ flex: 1 }}>
+                                            ELIMINAR DEL LISTADO
+                                        </button>
+                                        <button
+                                            className="btn-edit-platforms"
+                                            onClick={() => onAdd(game)}
+                                            style={{
+                                                padding: '0 16px',
+                                                background: 'rgba(157, 78, 221, 0.15)',
+                                                border: '1px solid rgba(157, 78, 221, 0.4)',
+                                                borderRadius: '12px',
+                                                fontSize: '1.5rem',
+                                                cursor: 'pointer',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                color: '#fff',
+                                                transition: 'all 0.2s ease',
+                                                boxShadow: '0 2px 8px rgba(157, 78, 221, 0.2)'
+                                            }}
+                                            onMouseEnter={(e) => {
+                                                e.target.style.background = 'rgba(157, 78, 221, 0.3)';
+                                                e.target.style.transform = 'translateY(-2px)';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.target.style.background = 'rgba(157, 78, 221, 0.15)';
+                                                e.target.style.transform = 'translateY(0)';
+                                            }}
+                                            title="Editar plataformas/categorías"
+                                        >
+                                            🎮
+                                        </button>
+                                    </div>
                                 ) : (
                                     <button className="btn-add" onClick={() => onAdd(game)}>
                                         ➕ Añadir a colección

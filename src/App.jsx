@@ -82,24 +82,66 @@ function App() {
     setSearched(false);
   };
 
+  const [initialPlatforms, setInitialPlatforms] = useState([]);
+
+  // ... (existing code)
+
   const handleGameAdd = (game, onSuccess) => {
     setSelectedGame(game);
     setSearchClearCallback(() => onSuccess);
+
+    // Determine which platforms this game is already added to
+    const currentPlatforms = [];
+    Object.keys(collection).forEach(platform => {
+      if (collection[platform].some(g => g.id === game.id)) {
+        currentPlatforms.push(platform);
+      }
+    });
+    setInitialPlatforms(currentPlatforms);
+
     setShowPlatformSelector(true);
   };
 
-  const handlePlatformConfirm = (game, platform) => {
-    const result = saveGame(game, platform);
+  const handlePlatformConfirm = (game, selectedPlatforms) => {
+    // Diffing logic
+    // 1. New platforms to add
+    const platformsToAdd = selectedPlatforms.filter(p => !initialPlatforms.includes(p));
+    // 2. Platforms to remove
+    const platformsToRemove = initialPlatforms.filter(p => !selectedPlatforms.includes(p));
 
-    if (result.success) {
+    let successCount = 0;
+
+    // Add to new platforms
+    platformsToAdd.forEach(platform => {
+      const result = saveGame(game, platform);
+      if (result.success) successCount++;
+    });
+
+    // Remove from deselected platforms
+    platformsToRemove.forEach(platform => {
+      removeGame(game.id, platform);
+    });
+
+    // Determine functionality outcome
+    if (successCount > 0 || platformsToRemove.length > 0) {
       loadCollection();
       setShowPlatformSelector(false);
       setSelectedGame(null);
+      setInitialPlatforms([]); // Reset
 
-      // Clear search immediately
-      handleSearchClear();
+      // If we came from search and added successfully, we might want to allow callback
+      if (searchClearCallback) {
+        // If we added at least one, we can consider it "success" for search clearing purposes
+        // But maybe we don't want to clear search if they just edited?
+        // The requirement was: "guardando el juego en varias categorias".
+        // If it was a new add, we clear search usually.
+        if (initialPlatforms.length === 0) {
+          handleSearchClear();
+        }
+      }
     } else {
-      alert(result.message);
+      // No changes made or error
+      setShowPlatformSelector(false);
     }
   };
 
@@ -115,7 +157,6 @@ function App() {
 
   // Remove game from all platforms (Toggle removal)
   const handleRemoveAnyPlatform = (gameId) => {
-    // Find all platforms containing this game
     const platformsToRemove = [];
     Object.keys(collection).forEach(platform => {
       if (collection[platform].some(g => g.id === gameId)) {
@@ -125,8 +166,6 @@ function App() {
 
     if (platformsToRemove.length === 0) return;
 
-    // Remove from each
-    let success = true;
     platformsToRemove.forEach(p => {
       removeGame(gameId, p);
     });
@@ -137,7 +176,8 @@ function App() {
   const handlePlatformCancel = () => {
     setShowPlatformSelector(false);
     setSelectedGame(null);
-    setSearchClearCallback(null); // Clear callback without calling it
+    setInitialPlatforms([]);
+    setSearchClearCallback(null);
   };
 
   // Compute all added game IDs for checking status
@@ -173,6 +213,7 @@ function App() {
       {showPlatformSelector && selectedGame && (
         <PlatformSelector
           game={selectedGame}
+          initialSelection={initialPlatforms}
           onConfirm={handlePlatformConfirm}
           onCancel={handlePlatformCancel}
         />
