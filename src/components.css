@@ -179,7 +179,7 @@
     }
 
     .sort-menu {
-        right: 0;
+        right: auto;
         /* Align right or center? */
         left: auto;
         min-width: 200px;
