@@ -1907,8 +1907,14 @@ padding-top: 1rem;
     margin-top: 0.25rem;
 }
 
+.total-games,
+.top-platform,
+.platform-bars {
+    margin-bottom: 1rem;
+}
+
 .stats-section h3 {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     font-size: 1.1rem;
     color: #fff;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -2056,6 +2062,7 @@ padding-top: 1rem;
     padding: 1px 4px;
     border-radius: 4px;
 }
+
 
 @media (max-width: 600px) {
     .stat-card {
