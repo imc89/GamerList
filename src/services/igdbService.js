@@ -1,11 +1,20 @@
-// IGDB API Service for GitHub Pages
-// Uses CORS proxy to bypass browser restrictions
+// IGDB API Service
+// Uses Vite proxy in development (local) and CORS proxy in production
 
 const TWITCH_CLIENT_ID = 'hz0jx77bpwl3kccpmdoh3lfwsp1vkf';
 const TWITCH_CLIENT_SECRET = 'zpbvke1c0riov3ogijrzyqm38kwi7n';
-const IGDB_API_URL = 'https://api.igdb.com/v4/games';
-const TWITCH_OAUTH_URL = 'https://id.twitch.tv/oauth2/token';
-const CORS_PROXY = 'https://corsproxy.io/?';
+
+// Environment detection
+const isDev = import.meta.env.DEV;
+
+// URLs based on environment
+const AUTH_URL = isDev
+    ? '/api/twitch/token'
+    : 'https://cors-anywhere.herokuapp.com/https://id.twitch.tv/oauth2/token';
+
+const API_URL = isDev
+    ? '/api/igdb/games'
+    : 'https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games';
 
 // Token cache
 let cachedToken = null;
@@ -23,13 +32,16 @@ async function getAccessToken() {
     try {
         console.log('🔑 Fetching OAuth token...');
 
-        // Use CORS proxy for the OAuth request
-        const response = await fetch(
-            `${CORS_PROXY}${TWITCH_OAUTH_URL}?client_id=${TWITCH_CLIENT_ID}&client_secret=${TWITCH_CLIENT_SECRET}&grant_type=client_credentials`,
-            {
-                method: 'POST'
+        // In production with cors-anywhere, we might need to be careful with headers
+        // But for the token endpoint, usually parameters are enough
+        const url = `${AUTH_URL}?client_id=${TWITCH_CLIENT_ID}&client_secret=${TWITCH_CLIENT_SECRET}&grant_type=client_credentials`;
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                // 'Origin': 'http://localhost' // sometimes needed for cors-anywhere
             }
-        );
+        });
 
         if (!response.ok) {
             throw new Error(`OAuth failed: ${response.status}`);
@@ -49,7 +61,7 @@ async function getAccessToken() {
 }
 
 /**
- * Search for games using IGDB API through CORS proxy
+ * Search for games using IGDB API
  */
 export async function searchGames(query) {
     if (!query || query.trim().length < 2) {
@@ -66,14 +78,15 @@ export async function searchGames(query) {
 
         console.log(`🔍 Searching for: ${query}`);
 
-        // Use CORS proxy to bypass browser restrictions
-        const response = await fetch(`${CORS_PROXY}${IGDB_API_URL}`, {
+        const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Client-ID': TWITCH_CLIENT_ID,
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json',
-                'Content-Type': 'text/plain'
+                'Content-Type': 'text/plain',
+                // Add this header to avoid some CORS preflight issues with proxies
+                'x-requested-with': 'XMLHttpRequest'
             },
             body: `
                 search "${query}";
