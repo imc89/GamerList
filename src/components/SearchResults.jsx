@@ -2,7 +2,7 @@ import { useState } from 'react';
 import GameCard from './GameCard';
 import GameDetailModal from './GameDetailModal';
 
-function SearchResults({ results, loading, onGameAdd, onGameRemove, addedGameIds }) {
+function SearchResults({ results, loading, error, onGameAdd, onGameRemove, addedGameIds }) {
     const [selectedGame, setSelectedGame] = useState(null);
 
     if (loading) {
@@ -10,6 +10,18 @@ function SearchResults({ results, loading, onGameAdd, onGameRemove, addedGameIds
             <div className="search-results">
                 <div className="loading-container">
                     <div className="loading-spinner"></div>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="search-results">
+                <div className="empty-state error-state">
+                    <div className="empty-state-icon">⚠️</div>
+                    <p style={{ color: '#ff6b6b', fontWeight: '500' }}>Error en el servicio</p>
+                    <p style={{ fontSize: '0.9em', opacity: 0.8, marginTop: '0.5rem' }}>{error}</p>
                 </div>
             </div>
         );

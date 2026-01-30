@@ -49,6 +49,7 @@ function GameList({
     searchResults,
     searchLoading,
     searchSearched,
+    searchError,
     onGameAdd,
     onGameRemoveFromSearch,
     addedGameIds
@@ -264,6 +265,7 @@ function GameList({
                         <SearchResults
                             results={searchResults}
                             loading={searchLoading}
+                            error={searchError}
                             onGameAdd={onGameAdd}
                             onGameRemove={onGameRemoveFromSearch}
                             addedGameIds={addedGameIds}

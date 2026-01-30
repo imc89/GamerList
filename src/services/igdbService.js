@@ -7,9 +7,8 @@ const TWITCH_CLIENT_SECRET = 'zpbvke1c0riov3ogijrzyqm38kwi7n';
 // Environment detection
 const isDev = import.meta.env.DEV;
 
-// IMPORTANT: Replace this URL with your Vercel deployment URL after deploying
-// Example: 'https://gamerlist-proxy.vercel.app'
-const VERCEL_PROXY_URL = 'YOUR_VERCEL_URL_HERE';
+// Vercel proxy URL for production
+const VERCEL_PROXY_URL = 'https://gamer-list-proxy.vercel.app';
 
 // URLs based on environment
 const AUTH_URL = isDev
@@ -46,7 +45,8 @@ async function getAccessToken() {
         });
 
         if (!response.ok) {
-            throw new Error(`OAuth failed: ${response.status}`);
+            const errorText = await response.text();
+            throw new Error(`OAuth failed: ${response.status} - ${errorText}`);
         }
 
         const data = await response.json();
@@ -58,7 +58,7 @@ async function getAccessToken() {
         return cachedToken;
     } catch (error) {
         console.error('❌ Error getting OAuth token:', error);
-        return null;
+        throw new Error('No se pudo obtener el token de autenticación. Por favor, intenta más tarde.');
     }
 }
 
@@ -72,11 +72,6 @@ export async function searchGames(query) {
 
     try {
         const token = await getAccessToken();
-
-        if (!token) {
-            console.warn('⚠️ No access token, using mock data');
-            return getMockResults(query);
-        }
 
         console.log(`🔍 Searching for: ${query}`);
 
@@ -97,7 +92,8 @@ export async function searchGames(query) {
         });
 
         if (!response.ok) {
-            throw new Error(`IGDB API error: ${response.status}`);
+            const errorText = await response.text();
+            throw new Error(`IGDB API error: ${response.status} - ${errorText}`);
         }
 
         const games = await response.json();
@@ -116,67 +112,8 @@ export async function searchGames(query) {
         }));
     } catch (error) {
         console.error('❌ Error searching games:', error);
-        return getMockResults(query);
+        throw error;
     }
-}
-
-// Mock data fallback
-function getMockResults(query) {
-    const mockGames = [
-        {
-            id: 1,
-            name: 'The Legend of Zelda: Breath of the Wild',
-            coverUrl: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co1r7f.jpg',
-            platforms: ['Switch', 'Wii U'],
-            releaseDate: 2017,
-            summary: 'Step into a world of discovery, exploration and adventure in The Legend of Zelda: Breath of the Wild.'
-        },
-        {
-            id: 2,
-            name: 'Elden Ring',
-            coverUrl: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co4jni.jpg',
-            platforms: ['PC', 'PS5', 'PS4', 'XSXS', 'XONE'],
-            releaseDate: 2022,
-            summary: 'A new fantasy action RPG. Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring.'
-        },
-        {
-            id: 3,
-            name: 'God of War Ragnarök',
-            coverUrl: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co5s5v.jpg',
-            platforms: ['PS5', 'PS4'],
-            releaseDate: 2022,
-            summary: 'Kratos and Atreus embark on a mythic journey for answers before Ragnarök arrives.'
-        },
-        {
-            id: 4,
-            name: 'Hades',
-            coverUrl: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co2i0u.jpg',
-            platforms: ['PC', 'Switch', 'PS5', 'PS4', 'XSXS', 'XONE'],
-            releaseDate: 2020,
-            summary: 'Defy the god of the dead as you hack and slash out of the Underworld in this rogue-like dungeon crawler.'
-        },
-        {
-            id: 5,
-            name: 'Cyberpunk 2077',
-            coverUrl: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co2lbd.jpg',
-            platforms: ['PC', 'PS5', 'PS4', 'XSXS', 'XONE'],
-            releaseDate: 2020,
-            summary: 'An open-world, action-adventure story set in Night City, a megalopolis obsessed with power, glamour and body modification.'
-        },
-        {
-            id: 6,
-            name: 'Minecraft',
-            coverUrl: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co5w3b.jpg',
-            platforms: ['PC', 'Switch', 'PS5', 'PS4', 'XSXS', 'XONE'],
-            releaseDate: 2011,
-            summary: 'A game about placing blocks and going on adventures.'
-        }
-    ];
-
-    const searchLower = query.toLowerCase();
-    return mockGames.filter(game =>
-        game.name.toLowerCase().includes(searchLower)
-    ).slice(0, 10);
 }
 
 export default {

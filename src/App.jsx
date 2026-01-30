@@ -24,6 +24,7 @@ function App() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
+  const [searchError, setSearchError] = useState(null);
 
   // Prevent context menu (right click)
   useEffect(() => {
@@ -55,18 +56,23 @@ function App() {
     if (query.trim().length < 2) {
       setResults([]);
       setSearched(false);
+      setSearchError(null);
       return;
     }
 
     setLoading(true);
+    setSearchError(null);
     const timer = setTimeout(async () => {
       try {
         const games = await apiSearchGames(query);
         setResults(games);
         setSearched(true);
+        setSearchError(null);
       } catch (error) {
         console.error('Search error:', error);
         setResults([]);
+        setSearched(true);
+        setSearchError(error.message || 'Error al buscar juegos. Por favor, intenta más tarde.');
       } finally {
         setLoading(false);
       }
@@ -80,6 +86,7 @@ function App() {
     setQuery('');
     setResults([]);
     setSearched(false);
+    setSearchError(null);
   };
 
   const [initialPlatforms, setInitialPlatforms] = useState([]);
@@ -204,6 +211,7 @@ function App() {
           searchResults={results}
           searchLoading={loading}
           searchSearched={searched}
+          searchError={searchError}
           onGameAdd={handleGameAdd}
           onGameRemoveFromSearch={handleRemoveAnyPlatform}
           addedGameIds={addedGameIds}
