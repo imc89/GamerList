@@ -10,11 +10,11 @@ const isDev = import.meta.env.DEV;
 // URLs based on environment
 const AUTH_URL = isDev
     ? '/api/twitch/token'
-    : 'https://cors-anywhere.herokuapp.com/https://id.twitch.tv/oauth2/token';
+    : 'https://id.twitch.tv/oauth2/token';
 
 const API_URL = isDev
     ? '/api/igdb/games'
-    : 'https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games';
+    : 'https://api.igdb.com/v4/games';
 
 // Token cache
 let cachedToken = null;
@@ -32,14 +32,17 @@ async function getAccessToken() {
     try {
         console.log('🔑 Fetching OAuth token...');
 
-        // In production with cors-anywhere, we might need to be careful with headers
-        // But for the token endpoint, usually parameters are enough
-        const url = `${AUTH_URL}?client_id=${TWITCH_CLIENT_ID}&client_secret=${TWITCH_CLIENT_SECRET}&grant_type=client_credentials`;
+        let url = `${AUTH_URL}?client_id=${TWITCH_CLIENT_ID}&client_secret=${TWITCH_CLIENT_SECRET}&grant_type=client_credentials`;
+
+        // If production, route through AllOrigins
+        if (!isDev) {
+            url = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+        }
 
         const response = await fetch(url, {
-            method: 'POST',
+            method: 'POST', // Note: AllOrigins might not support POST
             headers: {
-                // 'Origin': 'http://localhost' // sometimes needed for cors-anywhere
+                // 'Origin': 'http://localhost' 
             }
         });
 
@@ -47,7 +50,16 @@ async function getAccessToken() {
             throw new Error(`OAuth failed: ${response.status}`);
         }
 
-        const data = await response.json();
+        let data = await response.json();
+
+        // Handle AllOrigins response format
+        if (!isDev && data.contents) {
+            try {
+                data = JSON.parse(data.contents);
+            } catch (e) {
+                console.warn('Failed to parse AllOrigins contents', e);
+            }
+        }
 
         cachedToken = data.access_token;
         tokenExpiry = Date.now() + (data.expires_in * 1000);
@@ -78,14 +90,18 @@ export async function searchGames(query) {
 
         console.log(`🔍 Searching for: ${query}`);
 
-        const response = await fetch(API_URL, {
+        let url = API_URL;
+        if (!isDev) {
+            url = `https://api.allorigins.win/get?url=${encodeURIComponent(API_URL)}`;
+        }
+
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Client-ID': TWITCH_CLIENT_ID,
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json',
                 'Content-Type': 'text/plain',
-                // Add this header to avoid some CORS preflight issues with proxies
                 'x-requested-with': 'XMLHttpRequest'
             },
             body: `
@@ -100,7 +116,17 @@ export async function searchGames(query) {
             throw new Error(`IGDB API error: ${response.status}`);
         }
 
-        const games = await response.json();
+        let games = await response.json();
+
+        // Handle AllOrigins response format
+        if (!isDev && games.contents) {
+            try {
+                games = JSON.parse(games.contents);
+            } catch (e) {
+                console.warn('Failed to parse AllOrigins contents', e);
+            }
+        }
+
         console.log(`✅ Found ${games.length} games`);
 
         return games.map(game => ({
