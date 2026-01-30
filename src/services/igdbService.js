@@ -10,11 +10,11 @@ const isDev = import.meta.env.DEV;
 // URLs based on environment
 const AUTH_URL = isDev
     ? '/api/twitch/token'
-    : 'https://cors-anywhere.herokuapp.com/https://id.twitch.tv/oauth2/token';
+    : 'https://id.twitch.tv/oauth2/token';
 
 const API_URL = isDev
     ? '/api/igdb/games'
-    : 'https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games';
+    : 'https://api.igdb.com/v4/games';
 
 // Token cache
 let cachedToken = null;
@@ -34,7 +34,12 @@ async function getAccessToken() {
 
         // In production with cors-anywhere, we might need to be careful with headers
         // But for the token endpoint, usually parameters are enough
-        const url = `${AUTH_URL}?client_id=${TWITCH_CLIENT_ID}&client_secret=${TWITCH_CLIENT_SECRET}&grant_type=client_credentials`;
+        let url = `${AUTH_URL}?client_id=${TWITCH_CLIENT_ID}&client_secret=${TWITCH_CLIENT_SECRET}&grant_type=client_credentials`;
+
+        // Use AllOrigins raw proxy in production
+        if (!isDev) {
+            url = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+        }
 
         const response = await fetch(url, {
             method: 'POST',
@@ -78,7 +83,12 @@ export async function searchGames(query) {
 
         console.log(`🔍 Searching for: ${query}`);
 
-        const response = await fetch(API_URL, {
+        let url = API_URL;
+        if (!isDev) {
+            url = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+        }
+
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Client-ID': TWITCH_CLIENT_ID,
