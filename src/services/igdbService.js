@@ -36,9 +36,9 @@ async function getAccessToken() {
         // But for the token endpoint, usually parameters are enough
         let url = `${AUTH_URL}?client_id=${TWITCH_CLIENT_ID}&client_secret=${TWITCH_CLIENT_SECRET}&grant_type=client_credentials`;
 
-        // Use AllOrigins raw proxy in production
+        // Use ThingProxy in production
         if (!isDev) {
-            url = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+            url = `https://thingproxy.freeboard.io/fetch/${url}`;
         }
 
         const response = await fetch(url, {
@@ -85,7 +85,7 @@ export async function searchGames(query) {
 
         let url = API_URL;
         if (!isDev) {
-            url = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+            url = `https://thingproxy.freeboard.io/fetch/${url}`;
         }
 
         const response = await fetch(url, {
