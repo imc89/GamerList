@@ -1,5 +1,5 @@
 // IGDB API Service
-// Uses Vite proxy in development (local) and CORS proxy in production
+// Uses Vite proxy in development (local) and Vercel proxy in production
 
 const TWITCH_CLIENT_ID = 'hz0jx77bpwl3kccpmdoh3lfwsp1vkf';
 const TWITCH_CLIENT_SECRET = 'zpbvke1c0riov3ogijrzyqm38kwi7n';
@@ -7,14 +7,18 @@ const TWITCH_CLIENT_SECRET = 'zpbvke1c0riov3ogijrzyqm38kwi7n';
 // Environment detection
 const isDev = import.meta.env.DEV;
 
+// IMPORTANT: Replace this URL with your Vercel deployment URL after deploying
+// Example: 'https://gamerlist-proxy.vercel.app'
+const VERCEL_PROXY_URL = 'YOUR_VERCEL_URL_HERE';
+
 // URLs based on environment
 const AUTH_URL = isDev
     ? '/api/twitch/token'
-    : 'https://cors-anywhere.herokuapp.com/https://id.twitch.tv/oauth2/token';
+    : `${VERCEL_PROXY_URL}/api/twitch-token`;
 
 const API_URL = isDev
     ? '/api/igdb/games'
-    : 'https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games';
+    : `${VERCEL_PROXY_URL}/api/igdb-games`;
 
 // Token cache
 let cachedToken = null;
@@ -32,14 +36,12 @@ async function getAccessToken() {
     try {
         console.log('🔑 Fetching OAuth token...');
 
-        // In production with cors-anywhere, we might need to be careful with headers
-        // But for the token endpoint, usually parameters are enough
         const url = `${AUTH_URL}?client_id=${TWITCH_CLIENT_ID}&client_secret=${TWITCH_CLIENT_SECRET}&grant_type=client_credentials`;
 
         const response = await fetch(url, {
             method: 'POST',
             headers: {
-                // 'Origin': 'http://localhost' // sometimes needed for cors-anywhere
+                'Content-Type': 'application/json'
             }
         });
 
@@ -84,9 +86,7 @@ export async function searchGames(query) {
                 'Client-ID': TWITCH_CLIENT_ID,
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json',
-                'Content-Type': 'text/plain',
-                // Add this header to avoid some CORS preflight issues with proxies
-                'x-requested-with': 'XMLHttpRequest'
+                'Content-Type': 'text/plain'
             },
             body: `
                 search "${query}";
